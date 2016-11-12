@@ -11,9 +11,7 @@
 
 #include "Plane.h"
 #include <iostream>
-#include "Bullet.h" 
 #include "GraphicsHeader.h"
-#include "ExplosionManager.h"
 
 class ComputerPlane : public Plane {
     
@@ -26,10 +24,9 @@ class ComputerPlane : public Plane {
     
     
     
-    std::vector<Bullet> bullets;
     
 public:
-    ExplosionManager *explosives;
+
     double defaultSpeed = 6*.12 + .12;
     double manuverability = 1;
     double isLock = 0;
@@ -184,7 +181,6 @@ public:
         if ((abs(planeYawDesired-planeYaw)<2)&& (abs(desiredPitch-pitch)<2)&&flatDistance<100) {
             if ((fireCount%20) == fireNumber) {
                 speed*=2;
-                bullets.push_back(fireBullet());
                 speed/=2;
             }
             
@@ -198,36 +194,7 @@ public:
         fireCount++;
     }
     
-    void drawBullets(){
-        for (int i = 0; i<bullets.size(); i++) {
-            if (bullets.size()<1) {
-                break;
-            }
-            if (bullets.size()>10) {
-                bullets.erase(bullets.begin());
-            }
-            if ((abs(bullets[i].x-enemyPlane->x)<6)&&(abs(bullets[i].z-enemyPlane->z)<6)&&(abs(bullets[i].y-enemyPlane->y)<3)&&!bullets[i].hasHit) {
-                bullets[i].radius = .8;
-                enemyPlane->dead = 1;
-                enemyPlane->pitch = -30;
-                enemyPlane->roll = 0;
-                //enemyPlane->speed= 0;
-                bullets.erase(bullets.begin()+i);
-                //bullets[i].speed = 0;
-                //bullets[i].hasHit = 1;
-                double hitX,hitY,hitZ;
-                hitX = enemyPlane->x;
-                hitY = enemyPlane->y;
-                hitZ = enemyPlane->z;
-                (*explosives).generateExplosion(hitX, hitY, hitZ, 0, 0, 0);
-                
-            }else{
-                bullets[i].moveBullet();
-            }
-            bullets[i].drawBullet();
-            
-        }
-    }
+
 
     /*
     void drawUserBullets(std::vector <ComputerPlane> * enemies){

@@ -6,16 +6,16 @@
 #include <vector>
 #include <fstream>
 #include "Plane.h"
-#include "Bullet.h"
 #include "HumanPlane.h"
 #include "OBJParser.h"
 #include "Guage.h"
+#include "x5car.h"
 
 #define SCREEN_WIDTH 1366
 #define SCREEN_HEIGHT 768
 
-OBJParser x5Car("/home/matt/Desktop/simpleX5.obj");
-
+//OBJParser x5Car("/home/matt/Desktop/simpleX5.obj");
+x5car mainModel(40.0f,-10.0f,0);
 
 
 float angle=0.0,deltaAngle = 0.0,ratio,rotationAngleDelta = 0,rotationAngle = 0;
@@ -146,16 +146,7 @@ GLuint createDL() {
 
 
 void drawCar(){
-	float carX=40.0f,carY=-10.0f,carZ=0.0f;
-	x5Car.x = carX;
-	x5Car.y = carY;
-	x5Car.z = carZ;
-	x5Car.roll = 270;
-	x5Car.pitch = 0;
-	x5Car.yaw = 270;
-	x5Car.drawOBJ();
-
-
+	mainModel.draw();
 }
 
 void drawGuage(){
@@ -208,15 +199,6 @@ void drawHUD(){
 
 	glClear(GL_DEPTH_BUFFER_BIT);
 
-	glTranslatef(300,300,0);
-	glBegin(GL_QUADS);
-		glColor3f(1.0f, 0.0f, 0.0);
-		glVertex2f(0.0, 0.0);
-		glVertex2f(20.0, 0.0);
-		glVertex2f(20.0, 20.0);
-		glVertex2f(0.0, 20.0);
-	glEnd();
-	glTranslatef(-300,-300,0);
 
 	drawGuage();
 
@@ -296,7 +278,6 @@ void pressKey(unsigned char key, int x, int y) {
 		}
 		break;
 	case 'u':
-		mainPlane.userFire();
 		break;
 	case 'y':
 		break;
@@ -329,7 +310,7 @@ int main(int argc, char **argv) {
 
 
 	glutInit(&argc, argv);
-	//glutSetOption(GLUT_MULTISAMPLE,8);
+	glutSetOption(GLUT_MULTISAMPLE,8);
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA | GLUT_MULTISAMPLE);
 	glutInitWindowPosition(100,100);
 	glutInitWindowSize(1366,768);
@@ -364,7 +345,7 @@ int main(int argc, char **argv) {
 
 
 
-	glClearColor(0.1f, 0.1f, .1f, .5f);
+	glClearColor(0.11f, 0.11f, .11f, .5f);
 
 	glutIgnoreKeyRepeat(.05);
 

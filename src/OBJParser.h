@@ -41,10 +41,12 @@ public:
     double roll;
     double pitch;
     double yaw;
+    double scale;
 
     void drawOBJ();
 
-	OBJParser(char * path);
+    OBJParser();
+    OBJParser(char * path);
 	virtual ~OBJParser();
 };
 

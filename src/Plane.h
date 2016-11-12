@@ -11,7 +11,6 @@
 
 #include <math.h>
 #include "GraphicsHeader.h"
-#include "Bullet.h"
 #include <vector>
 
 class Plane {
@@ -40,7 +39,7 @@ public:
         roll = 0;
         pitch = 0;
         wingspan = 8;
-        speed = 0;
+        speed = .8;
         planeYaw = 0;
         planeRed = 0;
     }
@@ -181,17 +180,7 @@ public:
 
     }
     
-    Bullet fireBullet(){
-        Bullet shot;
-        shot.x = x;
-        shot.y = y;
-        shot.z = z;
-        shot.pitch = pitch;
-        shot.yaw = planeYaw;
-        shot.speed = speed*5;
-        shot.moveBullet();
-        return shot;
-    }
+
     
     
     

@@ -9,6 +9,19 @@
 
 using namespace std;
 
+
+OBJParser::OBJParser() {
+	x = 0;
+	y = 0;
+	z = 0;
+	roll = 0;
+	pitch = 0;
+	yaw = 0;
+	objectFile = NULL;
+	scale = 0.1;
+}
+
+
 OBJParser::OBJParser(char * path) {
 	objectFile = fopen(path, "r");
 	if( objectFile == NULL ){
@@ -91,7 +104,7 @@ void OBJParser::drawOBJ(){
 
 	glTranslatef(x, y, z);
 
-	glScalef(0.1,0.1,0.1);
+	glScalef(scale,scale,scale);
 
 	glPushMatrix();
 
@@ -120,7 +133,9 @@ void OBJParser::drawOBJ(){
 
 	glEnd();
 
+
 	glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
+
 		glBegin(GL_TRIANGLES);
 
 
@@ -136,15 +151,17 @@ void OBJParser::drawOBJ(){
 			
 			
 
-		}
+	}
 
-		glEnd();
+	glEnd();
+
+
 
 
 
 
 	glPopMatrix();
-	glScalef(10,10,10);
+	glScalef(1.0/scale,1.0/scale,1.0/scale);
 	glTranslatef(-x, -y, -z);
 	glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
 

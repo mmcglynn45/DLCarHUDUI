@@ -9,7 +9,8 @@ CPP_SRCS += \
 ../src/Guage_test.cpp \
 ../src/OBJParser.cpp \
 ../src/OBJParser_test.cpp \
-../src/TerrainTile.cpp 
+../src/TerrainTile.cpp \
+../src/x5car.cpp 
 
 OBJS += \
 ./src/DLCarHUDUI.o \
@@ -17,7 +18,8 @@ OBJS += \
 ./src/Guage_test.o \
 ./src/OBJParser.o \
 ./src/OBJParser_test.o \
-./src/TerrainTile.o 
+./src/TerrainTile.o \
+./src/x5car.o 
 
 CPP_DEPS += \
 ./src/DLCarHUDUI.d \
@@ -25,14 +27,15 @@ CPP_DEPS += \
 ./src/Guage_test.d \
 ./src/OBJParser.d \
 ./src/OBJParser_test.d \
-./src/TerrainTile.d 
+./src/TerrainTile.d \
+./src/x5car.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
 src/%.o: ../src/%.cpp
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C++ Compiler'
-	g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<"
+	g++ -I/usr/include/freetype2 -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 

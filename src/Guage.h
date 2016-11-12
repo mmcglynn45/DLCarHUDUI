@@ -19,6 +19,10 @@ public:
 	double x = 0;
 	double y = 0;
 	double z = 0;
+	double maxValue = 1;
+	double currentValue = 0.25;
+	double startOrientation = 270;
+
 
 	Guage();
 	virtual ~Guage();
