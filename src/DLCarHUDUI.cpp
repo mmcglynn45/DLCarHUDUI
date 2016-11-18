@@ -193,7 +193,6 @@ void drawHUD(){
 	glLoadIdentity();
 	glOrtho(0.0, SCREEN_WIDTH, SCREEN_HEIGHT, 0.0, -1.0, 10.0);
 	glMatrixMode(GL_MODELVIEW);
-	//glPushMatrix();        ----Not sure if I need this
 	glLoadIdentity();
 	glDisable(GL_CULL_FACE);
 
@@ -346,7 +345,7 @@ int main(int argc, char **argv) {
 
 
 
-	glClearColor(0.11f, 0.11f, .11f, .5f);
+	glClearColor(0.08f, 0.08f, .18f, .4f);
 
 	glutIgnoreKeyRepeat(.05);
 
