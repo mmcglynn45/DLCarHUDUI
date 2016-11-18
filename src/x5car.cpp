@@ -8,7 +8,7 @@
 #include "x5car.h"
 
 x5car::x5car(float baseX,float baseY, float baseZ) {
-	carModel = OBJParser("/home/matt/Desktop/simpleX5.obj");
+	carModel = OBJParser("./data/simpleX5.obj");
 	x = baseX;
 	y = baseY;
 	z = baseZ;

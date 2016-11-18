@@ -42,7 +42,6 @@
 									<listOptionValue builtIn="false" value="GLU"/>
 									<listOptionValue builtIn="false" value="glut"/>
 									<listOptionValue builtIn="false" value="GLEW"/>
-									<listOptionValue builtIn="false" value="freetype"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.327965214" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
