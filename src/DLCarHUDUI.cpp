@@ -258,17 +258,18 @@ void pressKey(unsigned char key, int x, int y) {
 	case 'c':
 		rotationAngleDelta = .008;break;
 	case '8':
+
 		//mainPlane.pitch-=6; break;
-		mainPlane.desiredPitch-=5; break;
+		//mainPlane.desiredPitch-=5; break;
 	case '5':
 		//mainPlane.pitch+=6; break;
-		mainPlane.desiredPitch+=5; break;
+		//mainPlane.desiredPitch+=5; break;
 	case '4':
 		//mainPlane.roll-=10;break;
-		mainPlane.desiredRoll-=9; break;
+		//mainPlane.desiredRoll-=9; break;
 	case '6':
 		//mainPlane.roll+=10;break;
-		mainPlane.desiredRoll+=9; break;
+		//mainPlane.desiredRoll+=9; break;
 	case 'p':
 		mainPlane.speed+=.1;break;
 	case 'o':
@@ -313,7 +314,7 @@ int main(int argc, char **argv) {
 	glutSetOption(GLUT_MULTISAMPLE,8);
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA | GLUT_MULTISAMPLE);
 	glutInitWindowPosition(100,100);
-	glutInitWindowSize(1366,768);
+	glutInitWindowSize(1920,1080);
 	glutCreateWindow("Car Heads Up Display");
 
 	initScene();
@@ -321,13 +322,13 @@ int main(int argc, char **argv) {
 	// Enable lighting
 	glEnable(GL_LIGHTING);
 	glEnable(GL_MULTISAMPLE);
-	//glEnable(GL_LIGHT0);
-	glEnable(GL_LIGHT1);
-	GLfloat light_ambient[] = { 1.0, 1.0, 1.0, 1.0 };
+	glEnable(GL_LIGHT0);
+	//glEnable(GL_LIGHT1);
+	GLfloat light_ambient[] = { 0.8, 0.8, 0.8, 0.5 };
 	GLfloat light_diffuse[] = { 0.1, 0.1, 0.1, 0.2 };
-	GLfloat light_specular[] = { 1.0, 1.0, 1.0, 1.0 };
-	GLfloat light_pos[] = { 20.0, 30.0, 10, 1 };
-	GLfloat light_dir[] = { 0.0, 0, 0};
+	GLfloat light_specular[] = { 0.3, 0.3, 0.3, 0.5 };
+	GLfloat light_pos[] = { 0.0, 30.0, -10, 1 };
+	GLfloat light_dir[] = { 0.5, 0.5, 0.5};
 	GLfloat mat_specular[] = {0.3, 0.3, 0.3, 1.0};
 	GLfloat mat_shininess[] = { 10.0 };
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);

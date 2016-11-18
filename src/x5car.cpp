@@ -17,6 +17,10 @@ x5car::x5car(float baseX,float baseY, float baseZ) {
 	revolvingOffset = 0.0f;
 	revolvingOffsetDelta = 0.0f;
 	sinOffset = 1.2f;
+	userOffset = 0.0f;
+	measuredPitch = 0.0f;
+	measuredRoll = 0.0f;
+	measuredYaw = 270.0f;
 
 
 	carModel.x = x;
@@ -29,6 +33,7 @@ x5car::x5car(float baseX,float baseY, float baseZ) {
 
 
 
+
 }
 
 x5car::~x5car() {
@@ -37,10 +42,12 @@ x5car::~x5car() {
 
 
 void x5car::draw(){
+	glRotatef(userOffset, 0, 0, 1);
 	glRotatef(30, 0, 0, 1);
 	carModel.drawOBJ();
 	drawOrientationRings();
 	glRotatef(-30, 0, 0, 1);
+	glRotatef(-userOffset, 0, 0, 1);
 }
 
 void x5car::drawOrientationRings(){
@@ -50,6 +57,8 @@ void x5car::drawOrientationRings(){
 	float xOffset = 0.0f;
 	float yOffset = -3.0f;
 	float zOffset = 0.0f;
+
+	//Translate to car center
 	glTranslatef(xOffset,yOffset,zOffset);
 
 
@@ -57,9 +66,15 @@ void x5car::drawOrientationRings(){
 
 	float ringRadius = orientationRingRadius;
 
+	//Rotate to follow actual yaw measurement
+	if(measuredYaw>180){
+		glRotatef(-measuredYaw, 0, 1, 0);
+	}else{
+		glRotatef(-(measuredYaw-360), 0, 1, 0);
+	}
 
-	//Ring 1
-	for(float i = 0; i<360; i+=360/180){
+	//Draw outer Yaw measured ring
+	for(int i = 0; i<360; i+=360/180){
 		glColor4f(0.3f, 0.5f, 0.6f, 0.7);
 		glLineWidth(0.2);
 		glBegin(GL_LINES);
@@ -68,6 +83,7 @@ void x5car::drawOrientationRings(){
 		float coordZ = sinf(angleRadians)*((ringRadius+ringRadius/8));
 		float coord2X = cosf(angleRadians)*((ringRadius+ringRadius/5));
 		float coord2Z = sinf(angleRadians)*((ringRadius+ringRadius/5));
+
 		glVertex3f(coordX,0,coordZ);
 		glVertex3f(coord2X,0,coord2Z);
 		glEnd();
@@ -76,8 +92,41 @@ void x5car::drawOrientationRings(){
 	drawSimpleArcXZ(ringRadius+ringRadius/5,ringRadius+ringRadius/5,5000,0,360);
 
 
+	//Rotate back
+	if(measuredYaw>180){
+		glRotatef(measuredYaw, 0, 1, 0);
+	}else{
+		glRotatef(measuredYaw-360, 0, 1, 0);
+	}
 
 
+
+	//Implement car orientation visualization
+
+	//Implement yaw measurement
+	//Anchor will be equivalent to true north
+	float anchorPoint = 290.0f;
+	float measurePoint = measuredYaw+anchorPoint;
+	float rotateDelta = 0.0f;
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0);
+	drawSimpleArcXZ(ringRadius+ringRadius/5,ringRadius+ringRadius/5,50,measurePoint-0.2,measurePoint+0.2,8.0);
+	drawSimpleArcXZ(ringRadius+ringRadius/5,ringRadius+ringRadius/5,50,anchorPoint-0.2,anchorPoint+0.2,5.0);
+
+	glColor4f(0.2f, 0.2f, 0.9f, 0.7);
+	if (measurePoint<(anchorPoint+180)){
+		drawSimpleArcXZ(ringRadius+ringRadius/5,ringRadius+ringRadius/5,10000,anchorPoint,measurePoint,5.0);
+	}else {
+		anchorPoint+=360;
+		drawSimpleArcXZ(ringRadius+ringRadius/5,ringRadius+ringRadius/5,10000,measurePoint,anchorPoint,5.0);
+	}
+
+
+
+
+
+
+
+	//Visual flourish inner rings
 	glColor4f(0.3f, 0.3f, 0.3f, 1.0);
 	drawSimpleArcXZ(ringRadius,ringRadius,5000,0,360);
 	drawSimpleArcXZ(ringRadius,ringRadius,5000,90,150,5.0);
@@ -85,7 +134,9 @@ void x5car::drawOrientationRings(){
 	drawSimpleArcXZ(ringRadius,ringRadius,5000,330,390,5.0);
 
 
-	if(revolvingOffset>360){
+	//Visual flourish revolving outer rings
+	//Handle ring orientation shifts
+	if(revolvingOffset>720){
 		revolvingOffset-=360;
 	}else if (revolvingOffset<0){
 		revolvingOffset+=360;
@@ -96,15 +147,13 @@ void x5car::drawOrientationRings(){
 	}
 
 
-	glColor4f(0.5f, 0.2f, 0.2f, 0.3);
+	glColor4f(0.2f, 0.2f, 0.2f, 0.3);
 
 	drawSimpleArcXZ(ringRadius+ringRadius/4,ringRadius+ringRadius/4,5000,revolvingOffset,revolvingOffset+60,2.0);
-	//drawSimpleArcXZ(ringRadius+ringRadius/4,ringRadius+ringRadius/4,5000,revolvingOffset+120,revolvingOffset+180,2.0);
 	drawSimpleArcXZ(ringRadius+ringRadius/4,ringRadius+ringRadius/4,5000,revolvingOffset+180,revolvingOffset+240,2.0);
 
 	//inverse rings
 	drawSimpleArcXZ(ringRadius+ringRadius/3.5,ringRadius+ringRadius/3.5,5000,inverseOffset+30,inverseOffset+60,3.0);
-	//drawSimpleArcXZ(ringRadius+ringRadius/3.5,ringRadius+ringRadius/3.5,5000,inverseOffset+180,inverseOffset+210,3.0);
 	drawSimpleArcXZ(ringRadius+ringRadius/3.5,ringRadius+ringRadius/3.5,5000,inverseOffset+210,inverseOffset+280,3.0);
 
 	float speedFactor = 0.003;
@@ -112,7 +161,12 @@ void x5car::drawOrientationRings(){
 	revolvingOffset+=sinf(sinOffset)*0.8;
 
 
-
+	measuredYaw=measuredYaw+sinf(sinOffset+4)*0.5;
+	if(measuredYaw>360){
+		measuredYaw-=360;
+	}if(measuredYaw<0){
+		measuredYaw+=360;
+	}
 
 
 

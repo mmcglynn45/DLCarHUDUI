@@ -24,6 +24,10 @@ public:
 	float revolvingOffset;
 	float revolvingOffsetDelta;
 	float sinOffset;
+	float userOffset;
+	float measuredPitch;
+	float measuredRoll;
+	float measuredYaw;
 
 
 	OBJParser carModel;

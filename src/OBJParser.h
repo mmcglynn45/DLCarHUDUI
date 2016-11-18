@@ -30,6 +30,9 @@ private:
 	std::vector< glm::vec2 > out_uvs;
 	std::vector< glm::vec3 > out_normals;
 
+	std::vector<GLfloat> simple_normals;
+	std::vector<GLfloat> simple_vertices;
+
 	//functions
 	int parseOBJ();
 

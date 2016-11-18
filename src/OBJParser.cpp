@@ -92,6 +92,18 @@ int OBJParser::parseOBJ(){
 		out_normals.push_back(normal);
 	}
 
+	for(int i = 0; i<out_vertices.size(); i++){
+		simple_vertices.push_back(out_vertices[i].x);
+		simple_vertices.push_back(out_vertices[i].z);
+		simple_vertices.push_back(out_vertices[i].y);
+	}
+
+	for(int i = 0; i<out_normals.size(); i++){
+		simple_normals.push_back(out_normals[i].x);
+		simple_normals.push_back(out_normals[i].z);
+		simple_normals.push_back(out_normals[i].y);
+	}
+
 	cout << "Done parsing OBJ file!" <<endl;
 
 	return 0;
@@ -115,45 +127,34 @@ void OBJParser::drawOBJ(){
 	//glHint( GL_LINE_SMOOTH_HINT, GL_NICEST );
 
 
+	size_t end= simple_vertices.size()/3;
+
 
 	glLineWidth(3);
 	glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
-	glBegin(GL_TRIANGLES);
+	glColor4f(0.3, 0.3, 0.3,0.4);
+	glEnableClientState(GL_NORMAL_ARRAY);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glNormalPointer(GL_FLOAT, 0, &simple_normals[0]);
+	glVertexPointer(3, GL_FLOAT, 0, &simple_vertices[0]);
+	glDrawArrays(GL_TRIANGLES, 0, end);
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_NORMAL_ARRAY);
 
-
-	for (int i = 0; i < out_vertices.size(); i+=3){
-		glNormal3d(out_normals[i].x, out_normals[i].z, out_normals[i].y);
-		glVertex3d(out_vertices[i].x, out_vertices[i].z, out_vertices[i].y);
-		glNormal3d(out_normals[i+1].x, out_normals[i+1].z, out_normals[i+1].y);
-		glVertex3d(out_vertices[i+1].x, out_vertices[i+1].z, out_vertices[i+1].y);
-		glNormal3d(out_normals[i+2].x, out_normals[i+2].z, out_normals[i+2].y);
-		glVertex3d(out_vertices[i+2].x, out_vertices[i+2].z, out_vertices[i+2].y);
-		glColor4f(0.3, 0.3, 0.3,0.4);
-	}
-
-	glEnd();
 
 
 	glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
 
-		glBegin(GL_TRIANGLES);
 
+	glColor4f(0.3, 0.3, 0.3,0.2);
+	//glEnableClientState(GL_NORMAL_ARRAY);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glNormalPointer(GL_FLOAT, 0, &simple_normals[0]);
+	glVertexPointer(3, GL_FLOAT, 0, &simple_vertices[0]);
+	glDrawArrays(GL_TRIANGLES, 0, end);
+	glDisableClientState(GL_VERTEX_ARRAY);
+	//glDisableClientState(GL_NORMAL_ARRAY);
 
-		for (int i = 0; i < out_vertices.size(); i+=3){
-			glNormal3d(out_normals[i].x, out_normals[i].z, out_normals[i].y);
-			glVertex3d(out_vertices[i].x, out_vertices[i].z, out_vertices[i].y);
-			glNormal3d(out_normals[i+1].x, out_normals[i+1].z, out_normals[i+1].y);
-			glVertex3d(out_vertices[i+1].x, out_vertices[i+1].z, out_vertices[i+1].y);
-			glNormal3d(out_normals[i+2].x, out_normals[i+2].z, out_normals[i+2].y);
-			glVertex3d(out_vertices[i+2].x, out_vertices[i+2].z, out_vertices[i+2].y);
-			glColor4f(0.3, 0.3, 0.3,0.3);
-			
-			
-			
-
-	}
-
-	glEnd();
 
 
 
