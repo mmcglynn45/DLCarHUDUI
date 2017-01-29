@@ -11,8 +11,8 @@
 #include "Guage.h"
 #include "x5car.h"
 
-#define SCREEN_WIDTH 1366
-#define SCREEN_HEIGHT 768
+#define SCREEN_WIDTH 1920
+#define SCREEN_HEIGHT 1080
 
 //OBJParser x5Car("/home/matt/Desktop/simpleX5.obj");
 x5car mainModel(40.0f,-10.0f,0);
