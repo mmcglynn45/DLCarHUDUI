@@ -18,8 +18,8 @@ x5car::x5car(float baseX,float baseY, float baseZ) {
 	revolvingOffsetDelta = 0.0f;
 	sinOffset = 1.2f;
 	userOffset = 0.0f;
-	measuredPitch = 0.0f;
-	measuredRoll = 0.0f;
+	measuredPitch = 5.0f;
+	measuredRoll = 5.0f;
 	measuredYaw = 270.0f;
 
 

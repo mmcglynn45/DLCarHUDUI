@@ -345,7 +345,7 @@ int main(int argc, char **argv) {
 
 
 
-	glClearColor(0.08f, 0.08f, .18f, .4f);
+	glClearColor(0.0f, 0.0f, .0f, .4f);
 
 	glutIgnoreKeyRepeat(.05);
 
