@@ -18,8 +18,8 @@ x5car::x5car(float baseX,float baseY, float baseZ) {
 	revolvingOffsetDelta = 0.0f;
 	sinOffset = 1.2f;
 	userOffset = 0.0f;
-	measuredPitch = 5.0f;
-	measuredRoll = 5.0f;
+	measuredPitch = 30.0f;
+	measuredRoll = 20.0f;
 	measuredYaw = 270.0f;
 
 
@@ -101,10 +101,10 @@ void x5car::drawOrientationRings(){
 
 	glColor4f(0.2f, 0.2f, 0.9f, 0.7);
 	if (measurePoint<(anchorPoint+180)){
-		drawSimpleArcXZ(ringRadius+ringRadius/5,ringRadius+ringRadius/5,3000,anchorPoint,measurePoint,5.0);
+		drawSimpleArcXZ(ringRadius+ringRadius/5,ringRadius+ringRadius/5,5000,anchorPoint,measurePoint,5.0);
 	}else {
 		anchorPoint+=360;
-		drawSimpleArcXZ(ringRadius+ringRadius/5,ringRadius+ringRadius/5,3000,measurePoint,anchorPoint,5.0);
+		drawSimpleArcXZ(ringRadius+ringRadius/5,ringRadius+ringRadius/5,5000,measurePoint,anchorPoint,5.0);
 	}
 
 

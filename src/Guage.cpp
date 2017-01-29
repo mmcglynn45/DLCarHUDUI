@@ -32,9 +32,9 @@ void Guage::drawGuage() {
 	glRotatef(0, 0, 0, 1);
 	glScalef(1.0,1.0,1.0);
 	glScalef(1,-1, 1);
-	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glColor4f(1.0f, 1.0f, 1.0f, 0.4f);
 	unsigned char * myText = (unsigned char*)"90";
-	//glutStrokeString(GLUT_STROKE_ROMAN,myText);
+	glutStrokeString(GLUT_STROKE_ROMAN,myText);
 	glRotatef(0, 0, 0, 1);
 	glPopMatrix();
 
