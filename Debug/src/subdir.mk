@@ -5,6 +5,7 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
 ../src/DLCarHUDUI.cpp \
+../src/DataController.cpp \
 ../src/Guage.cpp \
 ../src/Guage_test.cpp \
 ../src/OBJParser.cpp \
@@ -14,6 +15,7 @@ CPP_SRCS += \
 
 OBJS += \
 ./src/DLCarHUDUI.o \
+./src/DataController.o \
 ./src/Guage.o \
 ./src/Guage_test.o \
 ./src/OBJParser.o \
@@ -23,6 +25,7 @@ OBJS += \
 
 CPP_DEPS += \
 ./src/DLCarHUDUI.d \
+./src/DataController.d \
 ./src/Guage.d \
 ./src/Guage_test.d \
 ./src/OBJParser.d \

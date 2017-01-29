@@ -10,13 +10,15 @@
 #include "OBJParser.h"
 #include "Guage.h"
 #include "x5car.h"
+#include "DataController.h"
+#include <pthread.h>
 
 #define SCREEN_WIDTH 1920
 #define SCREEN_HEIGHT 1080
 
 //OBJParser x5Car("/home/matt/Desktop/simpleX5.obj");
 x5car mainModel(40.0f,-10.0f,0);
-
+DataController dataCont;
 
 float angle=0.0,deltaAngle = 0.0,ratio,rotationAngleDelta = 0,rotationAngle = 0;
 float x=0.0f,y=0.0f,z=0.0f;
@@ -29,6 +31,18 @@ int shipRotationAngle = 0;
 double pi = 3.14159262;
 HumanPlane mainPlane;
 double frameCount,currentTime,fps,previousTime,totalFPS=0, iterations=0;
+
+bool webThreadCreated = false;
+pthread_t webThread;
+
+struct webSocketData
+{
+	DataController * dataRef;
+	bool currentlyAccepting = false;
+};
+struct webSocketData webData;
+
+void* webAccept(void * webSocketDataPointer);
 
 void calculateFPS()
 {
@@ -155,9 +169,9 @@ void drawGuage(){
 	Guage throttleGuage;
 	throttleGuage.x=guageX;
 	throttleGuage.y=guageY;
-	throttleGuage.label = "   Throttle (%)  \0";
+	throttleGuage.label = "    Throttle (%)  \0";
 	throttleGuage.maxValue = 100.0;
-	throttleGuage.currentValue = 22.0;
+	throttleGuage.currentValue = dataCont.engineThrottle;
 	throttleGuage.drawGuage();
 
 	//Speed Guage 
@@ -165,11 +179,49 @@ void drawGuage(){
 	Guage speedGuage;
 	speedGuage.x=guageX;
 	speedGuage.y=guageY;
-	speedGuage.label =    "  Speed (MPH)   \0";
+	speedGuage.label =    "   Speed (MPH)   \0";
 	speedGuage.maxValue = 100.0;
-	speedGuage.currentValue = 70.0;
+	speedGuage.currentValue = dataCont.speed;
 	speedGuage.drawGuage();
 
+	//RPM Guage
+	guageY=800.0f;
+	Guage rpmGuage;
+	rpmGuage.x=guageX;
+	rpmGuage.y=guageY;
+	rpmGuage.label =    "     RPM (k)   \0";
+	rpmGuage.maxValue = 6.0;
+	rpmGuage.currentValue = dataCont.rpm;
+	rpmGuage.drawGuage();
+
+	//Air Intake Guage
+	guageX=1680.0f;
+	guageY=200.0f;
+	Guage intakeGuage;
+	intakeGuage.x=guageX;
+	intakeGuage.y=guageY;
+	intakeGuage.label =    "  Intake Air Temp (C) \0";
+	intakeGuage.maxValue = 120;
+	intakeGuage.currentValue = dataCont.airIntakeTemp;
+	intakeGuage.drawGuage();
+
+	guageY=500.0f;
+	Guage coolantGuage;
+	coolantGuage.x=guageX;
+	coolantGuage.y=guageY;
+	coolantGuage.label =    " Engine Coolant Temp (C) \0";
+	coolantGuage.maxValue = 250;
+	coolantGuage.currentValue = dataCont.engineCoolantTemp;
+	coolantGuage.drawGuage();
+
+	guageY=800.0f;
+	Guage manifestGuage;
+	manifestGuage.x=guageX;
+	manifestGuage.y=guageY;
+	manifestGuage.label =    " Manifest Pressure (kPA) \0";
+	manifestGuage.maxValue = 250;
+	manifestGuage.currentValue = dataCont.manifoldABS;
+	manifestGuage.drawGuage();
 
 }
 
@@ -240,11 +292,19 @@ void renderScene(void) {
 	}
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	if (!webThreadCreated&&!webData.currentlyAccepting) {
+		pthread_create(&webThread, NULL, webAccept, &webData);
+		webThreadCreated = true;
+	}
+
+	if (webThreadCreated&&!webData.currentlyAccepting)
+	{
+		pthread_join(webThread, NULL);
+		webThreadCreated = false;
+	}
+
 	drawPlane();
 	drawCar();
-
-
-
 	drawHUD();
 	calculateFPS();
 	glutSwapBuffers();
@@ -321,6 +381,7 @@ void releaseKey(int key, int x, int y) {
 
 int main(int argc, char **argv) {
 
+	webData.dataRef = &dataCont;
 
 
 	glutInit(&argc, argv);
@@ -374,4 +435,20 @@ int main(int argc, char **argv) {
 	glutMainLoop();
 
 	return(0);
+}
+
+void* webAccept(void * webSocketDataPointer) {
+
+	struct webSocketData * myWebSocket;
+	myWebSocket = (webSocketData*)webSocketDataPointer;
+	myWebSocket->currentlyAccepting = true;
+
+	DataController * dataContPointer;
+	dataContPointer = (DataController *)myWebSocket->dataRef;
+
+	dataContPointer->UpdateOBD();
+
+	myWebSocket->currentlyAccepting = false;
+
+	return 0;
 }

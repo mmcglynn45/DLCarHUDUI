@@ -23,6 +23,7 @@ x5car::x5car(float baseX,float baseY, float baseZ) {
 	measuredYaw = 270.0f;
 
 
+
 	carModel.x = x;
 	carModel.y = y;
 	carModel.z = z;
