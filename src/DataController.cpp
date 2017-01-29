@@ -69,27 +69,29 @@ void DataController::UpdateOBD(){
 
     std::getline(ss, token, ',');
     std::cout << token << '\n';
-    rpm = strtof(token.c_str(),NULL);
+    sscanf(token.c_str(), "RPM: %lf", &rpm);
+    std::cout << rpm;
+    std::cout << "Resolved rpm as " << rpm << "\n";
 
     std::getline(ss, token, ',');
     std::cout << token << '\n';
-    speed = strtof(token.c_str(),NULL);
+    sscanf(token.c_str(), " Speed: %lf", &speed);
 
     std::getline(ss, token, ',');
     std::cout << token << '\n';
-    engineThrottle = strtof(token.c_str(),NULL);
+    sscanf(token.c_str(), " Throttle: %lf", &engineThrottle);
 
     std::getline(ss, token, ',');
     std::cout << token << '\n';
-    airIntakeTemp = strtof(token.c_str(),NULL);
+    sscanf(token.c_str(), " IntakeTemp: %lf", &airIntakeTemp );
 
     std::getline(ss, token, ',');
     std::cout << token << '\n';
-    engineCoolantTemp = strtof(token.c_str(),NULL);
+    sscanf(token.c_str(), " EngineCoolantTemp: %lf", &engineCoolantTemp);
 
     std::getline(ss, token, ',');
     std::cout << token << '\n';
-    manifoldABS = strtof(token.c_str(),NULL);
+    sscanf(token.c_str(), " ManifoldABS: %lf", &manifoldABS);
 
     close(sockfd);
 }
