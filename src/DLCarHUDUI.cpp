@@ -150,11 +150,25 @@ void drawCar(){
 }
 
 void drawGuage(){
+	//Throttle Guage 
 	float guageX=200.0f,guageY=200.0f;
-	Guage fuelGuage;
-	fuelGuage.x=guageX;
-	fuelGuage.y=guageY;
-	fuelGuage.drawGuage();
+	Guage throttleGuage;
+	throttleGuage.x=guageX;
+	throttleGuage.y=guageY;
+	throttleGuage.label = "   Throttle (%)  \0";
+	throttleGuage.maxValue = 100.0;
+	throttleGuage.currentValue = 22.0;
+	throttleGuage.drawGuage();
+
+	//Speed Guage 
+	guageY=500.0f;
+	Guage speedGuage;
+	speedGuage.x=guageX;
+	speedGuage.y=guageY;
+	speedGuage.label =    "  Speed (MPH)   \0";
+	speedGuage.maxValue = 100.0;
+	speedGuage.currentValue = 70.0;
+	speedGuage.drawGuage();
 
 
 }

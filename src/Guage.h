@@ -19,9 +19,10 @@ public:
 	double x = 0;
 	double y = 0;
 	double z = 0;
-	double maxValue = 1;
-	double currentValue = 0.25;
+	double maxValue = 160;
+	double currentValue = 100;
 	double startOrientation = 270;
+	char * label = "Default Label (CM)\0";
 
 
 	Guage();

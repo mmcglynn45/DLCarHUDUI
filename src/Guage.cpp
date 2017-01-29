@@ -27,22 +27,41 @@ void Guage::drawGuage() {
 
 	glTranslatef(x,y,0);
 	glPushMatrix();
+	glTranslatef(-innerGuageRadius/2,innerGuageRadius/6,0);
 
-	glRasterPos2i(x, y);
+	//Draw Guage Value
 	glRotatef(0, 0, 0, 1);
-	glScalef(1.0,1.0,1.0);
+	glScalef(0.3,0.3,0.3);
 	glScalef(1,-1, 1);
-	glColor4f(1.0f, 1.0f, 1.0f, 0.4f);
-	unsigned char * myText = (unsigned char*)"90";
-	glutStrokeString(GLUT_STROKE_ROMAN,myText);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	char textBuffer[20];
+	int n = sprintf(textBuffer, "%2.1f\0",currentValue);
+	if(n>4){
+		glTranslatef(-innerGuageRadius/2,0,0);
+	}
+	if(n==4){
+		glTranslatef(-innerGuageRadius/4,0,0);
+	}
+	if(n==3){
+		glTranslatef(0,0,0);
+	}
+	glutStrokeString(GLUT_STROKE_ROMAN, (unsigned char*)textBuffer);
+
+	//Draw Guage Label
+	glScalef(0.5,0.5,0.5);
+	glTranslatef(-innerGuageRadius*12,innerGuageRadius*12,0);
+	glColor4f(1.0f, 1.0f, 1.0f, 0.6f);
+	glutStrokeString(GLUT_STROKE_ROMAN, (unsigned char*)label);
+
+
 	glRotatef(0, 0, 0, 1);
 	glPopMatrix();
 
 
 
 
-
-	glColor4f(.7f, 0.36f, 0.0f, 1.0);
+	float severity = (currentValue/maxValue)*.8+0.2;
+	glColor4f(severity, 0.2f, 0.9f, 0.7);
 	drawGuageArc(innerGuageRadius,outerGuageRadius,5000,startPos,endPos,1);
 
 	//draw Major Ticks
