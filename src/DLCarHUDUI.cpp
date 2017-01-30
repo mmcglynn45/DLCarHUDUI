@@ -483,7 +483,7 @@ void* webAccept(void * webSocketDataPointer) {
 	DataController * dataContPointer;
 	dataContPointer = (DataController *)myWebSocket->dataRef;
 
-	//dataContPointer->UpdateOBD();
+	dataContPointer->UpdateOBD();
 
 	myWebSocket->currentlyAccepting = false;
 
