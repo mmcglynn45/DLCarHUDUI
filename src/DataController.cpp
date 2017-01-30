@@ -106,7 +106,7 @@ void DataController::UpdateAccel(){
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if (sockfd < 0)
         error("ERROR opening socket");
-    server = gethostbyname("192.168.1.74");
+    server = gethostbyname("10.42.0.5");
     if (server == NULL) {
         fprintf(stderr,"ERROR, no such host\n");
         exit(0);
