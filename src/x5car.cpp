@@ -18,23 +18,18 @@ x5car::x5car(float baseX,float baseY, float baseZ) {
 	revolvingOffsetDelta = 0.0f;
 	sinOffset = 1.2f;
 	userOffset = 0.0f;
-	measuredPitch = 30.0f;
-	measuredRoll = 20.0f;
+	measuredPitch = 0.0f;
+	measuredRoll = 0.0f;
 	measuredYaw = 270.0f;
-
-
-
+	measuredMX = 0.0f;
+	measuredMY = 0.0f;
 	carModel.x = x;
 	carModel.y = y;
 	carModel.z = z;
-	carModel.roll = 270;
-	carModel.pitch = 0;
+	carModel.roll = 270+measuredRoll;
+	carModel.pitch = 0+measuredPitch;
 	carModel.yaw = 245;
 	carModel.scale = scale;
-
-
-
-
 }
 
 x5car::~x5car() {
@@ -45,13 +40,61 @@ x5car::~x5car() {
 void x5car::draw(){
 	glRotatef(userOffset, 0, 0, 1);
 	glRotatef(30, 0, 0, 1);
+	glRotatef(measuredRoll, 1, 0, 0);
+	glRotatef(measuredPitch, 0, 1, 0);
 	carModel.drawOBJ();
+	glRotatef(-measuredPitch, 0, 1, 0);
+	glRotatef(-measuredRoll, 1, 0, 0);
 	drawOrientationRings();
 	glRotatef(-30, 0, 0, 1);
 	glRotatef(-userOffset, 0, 0, 1);
 }
 
+void x5car::drawOrientationText(){
+	    glTranslatef(x,y,0);
+		glPushMatrix();
+		glTranslatef(550,scale*400,0);
+		//Draw Guage Value
+		glScalef(0.2,0.2,0.2);
+		glScalef(1,-1, 1);
+		glColor4f(0.3f, 0.5f, 0.6f, 1.0);
+		glutStrokeString(GLUT_STROKE_ROMAN, (unsigned char*)"Roll: ");
+		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+		char textBuffer[255];
+		int n = sprintf(textBuffer, "%2.2f \0",measuredRoll);
+		glutStrokeString(GLUT_STROKE_ROMAN, (unsigned char*)textBuffer);
+		glColor4f(0.3f, 0.5f, 0.6f, 1.0);
+		glutStrokeString(GLUT_STROKE_ROMAN, (unsigned char*)"Pitch: ");
+		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+		n = sprintf(textBuffer, "%2.2f \0",measuredPitch);
+		glutStrokeString(GLUT_STROKE_ROMAN, (unsigned char*)textBuffer);
+		glColor4f(0.3f, 0.5f, 0.6f, 1.0);
+		glutStrokeString(GLUT_STROKE_ROMAN, (unsigned char*)"Yaw: ");
+		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+		n = sprintf(textBuffer, "%2.2f \0",measuredYaw);
+		glutStrokeString(GLUT_STROKE_ROMAN, (unsigned char*)textBuffer);
+		glColor4f(0.3f, 0.5f, 0.6f, 1.0);
+		glutStrokeString(GLUT_STROKE_ROMAN, (unsigned char*)"MX: ");
+		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+		n = sprintf(textBuffer, "%2.2f \0",measuredMX);
+		glutStrokeString(GLUT_STROKE_ROMAN, (unsigned char*)textBuffer);
+		glColor4f(0.3f, 0.5f, 0.6f, 1.0);
+		glutStrokeString(GLUT_STROKE_ROMAN, (unsigned char*)"MY: ");
+		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+		n = sprintf(textBuffer, "%2.2f \0",measuredMY);
+		glutStrokeString(GLUT_STROKE_ROMAN, (unsigned char*)textBuffer);
+
+		glPopMatrix();
+	    glTranslatef(-x,-y,0);
+}
+
 void x5car::drawOrientationRings(){
+
+	if(measuredYaw>360){
+		measuredYaw-=360;
+	}if(measuredYaw<0){
+		measuredYaw+=360;
+	}
 
 
 	glTranslatef(x,y,z);
@@ -169,12 +212,7 @@ void x5car::drawOrientationRings(){
 	revolvingOffset+=sinf(sinOffset)*0.8;
 
 
-	measuredYaw=measuredYaw+sinf(sinOffset+4)*0.5;
-	if(measuredYaw>360){
-		measuredYaw-=360;
-	}if(measuredYaw<0){
-		measuredYaw+=360;
-	}
+
 
 
 
@@ -196,6 +234,14 @@ void x5car::drawOrientationRings(){
 		glEnd();
 	}
 	drawSimpleArcXY(ringRadius+ringRadius/8,ringRadius/1.3+ringRadius/8,1500,40,140);
+	glColor4f(0.3f, 0.3f, 0.9f, 0.9);
+	if(measuredRoll>0){
+		drawSimpleArcXY(ringRadius+ringRadius/8,ringRadius/1.3+ringRadius/8,1500,90,90+measuredRoll,10);
+	}else{
+		drawSimpleArcXY(ringRadius+ringRadius/8,ringRadius/1.3+ringRadius/8,1500,90+measuredRoll,90,10);
+	}
+
+	glColor4f(0.3f, 0.5f, 0.6f, 0.7);
 
 	//Ring 3
 	glRotatef(-90, 0, 1, 0);
@@ -214,6 +260,13 @@ void x5car::drawOrientationRings(){
 		glEnd();
 	}
 	drawSimpleArcXY(ringRadius+ringRadius/6,ringRadius/1.4+ringRadius/6,1500,40,140);
+	glColor4f(0.3f, 0.3f, 0.9f, 0.9);
+	if(measuredPitch>0){
+		drawSimpleArcXY(ringRadius+ringRadius/6,ringRadius/1.4+ringRadius/6,1500,90,90+measuredPitch,10);
+	}else{
+		drawSimpleArcXY(ringRadius+ringRadius/6,ringRadius/1.4+ringRadius/6,1500,90+measuredPitch,90,10);
+	}
+	glColor4f(0.3f, 0.5f, 0.6f, 0.7);
 
 
 	glTranslatef(-xOffset,-yOffset,-zOffset);

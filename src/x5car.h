@@ -28,6 +28,8 @@ public:
 	float measuredPitch;
 	float measuredRoll;
 	float measuredYaw;
+	float measuredMX;
+	float measuredMY;
 
 
 	OBJParser carModel;
@@ -35,6 +37,7 @@ public:
 	virtual ~x5car();
 	void draw();
 	void drawOrientationRings();
+	void drawOrientationText();
 	void drawSimpleArcXY(float innerRadius,float radius,float resolution,float startAngle, float maxAngle);
 	void drawSimpleArcXY(float innerRadius,float radius,float resolution,float startAngle, float maxAngle, float thickness);
 	void drawSimpleArcXZ(float innerRadius,float radius,float resolution,float startAngle, float maxAngle);

@@ -40,9 +40,22 @@ struct webSocketData
 	DataController * dataRef;
 	bool currentlyAccepting = false;
 };
+
 struct webSocketData webData;
 
+bool accelThreadCreated = false;
+pthread_t accelThread;
+
+struct accelSocketData
+{
+	DataController * dataRef;
+	bool currentlyAccepting = false;
+};
+
+struct accelSocketData accelData;
+
 void* webAccept(void * webSocketDataPointer);
+void* accelAccept(void * accelSocketDataPointer);
 
 void calculateFPS()
 {
@@ -160,10 +173,18 @@ GLuint createDL() {
 
 
 void drawCar(){
+	mainModel.measuredPitch = dataCont.pitch;
+	mainModel.measuredRoll = dataCont.roll;
+	mainModel.measuredYaw = dataCont.yaw;
+	mainModel.measuredMX = dataCont.mx;
+	mainModel.measuredMY = dataCont.my;
 	mainModel.draw();
 }
 
 void drawGuage(){
+
+	mainModel.drawOrientationText();
+
 	//Throttle Guage 
 	float guageX=200.0f,guageY=200.0f;
 	Guage throttleGuage;
@@ -173,6 +194,8 @@ void drawGuage(){
 	throttleGuage.maxValue = 100.0;
 	throttleGuage.currentValue = dataCont.engineThrottle;
 	throttleGuage.drawGuage();
+
+
 
 	//Speed Guage 
 	guageY=500.0f;
@@ -304,6 +327,18 @@ void renderScene(void) {
 		webThreadCreated = false;
 	}
 
+	if (!accelThreadCreated&&!accelData.currentlyAccepting) {
+		accelData.currentlyAccepting = true;
+		pthread_create(&accelThread, NULL, accelAccept, &accelData);
+		accelThreadCreated = true;
+	}
+
+	if (accelThreadCreated&&!accelData.currentlyAccepting)
+	{
+		pthread_join(accelThread, NULL);
+		accelThreadCreated = false;
+	}
+
 	drawPlane();
 	drawCar();
 	drawHUD();
@@ -383,6 +418,7 @@ void releaseKey(int key, int x, int y) {
 int main(int argc, char **argv) {
 
 	webData.dataRef = &dataCont;
+	accelData.dataRef = &dataCont;
 
 
 	glutInit(&argc, argv);
@@ -450,6 +486,23 @@ void* webAccept(void * webSocketDataPointer) {
 	dataContPointer->UpdateOBD();
 
 	myWebSocket->currentlyAccepting = false;
+
+	return 0;
+}
+
+void* accelAccept(void * accelSocketDataPointer) {
+
+	usleep(50000);
+	struct accelSocketData * myAccelSocket;
+	myAccelSocket = (accelSocketData*)accelSocketDataPointer;
+	myAccelSocket->currentlyAccepting = true;
+
+	DataController * dataContPointer;
+	dataContPointer = (DataController *)myAccelSocket->dataRef;
+
+	dataContPointer->UpdateAccel();
+
+	myAccelSocket->currentlyAccepting = false;
 
 	return 0;
 }
