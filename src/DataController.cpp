@@ -21,7 +21,11 @@
 void error(const char *msg);
 
 DataController::DataController() {
-	// TODO Auto-generated constructor stub
+	UpdateAccel();
+	rollOffset = -roll;
+	pitchOffset = -pitch;
+	myOffset = -my;
+	mxOffset = -mx;
 
 }
 
@@ -155,6 +159,11 @@ void DataController::UpdateAccel(){
     std::getline(ss, token, ',');
     std::cout << token << '\n';
     sscanf(token.c_str(), " MY: %lf", &my );
+
+    roll = roll + rollOffset;
+    pitch = pitch + pitchOffset;
+    mx = mx + mxOffset;
+    my = my + myOffset;
 
     close(sockfd);
 }

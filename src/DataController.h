@@ -22,6 +22,10 @@ public:
 	double yaw = 0.0;
 	double mx = 0.0;
 	double my = 0.0;
+	double rollOffset = 0.0;
+	double pitchOffset = 0.0;
+	double mxOffset = 0.0;
+	double myOffset = 0.0;
 
 	DataController();
 	virtual ~DataController();

@@ -119,10 +119,9 @@ void OBJParser::drawOBJ(){
 	glScalef(scale,scale,scale);
 
 	glPushMatrix();
-
+	glRotatef(pitch, 0, 0, 1);
 	glRotatef(yaw, 0, 1, 0);
 	glRotatef(roll, 1, 0, 0);
-	glRotatef(pitch, 0, 0, 1);
 	//glEnable( GL_LINE_SMOOTH );
 	//glHint( GL_LINE_SMOOTH_HINT, GL_NICEST );
 

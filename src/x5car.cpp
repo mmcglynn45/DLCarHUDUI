@@ -38,14 +38,21 @@ x5car::~x5car() {
 
 
 void x5car::draw(){
+	carModel.roll = 270-measuredRoll-measuredPitch*.4;
+	carModel.pitch = measuredPitch;
+	carModel.yaw = 245;
 	glRotatef(userOffset, 0, 0, 1);
 	glRotatef(30, 0, 0, 1);
-	glRotatef(measuredRoll, 1, 0, 0);
-	glRotatef(measuredPitch, 0, 1, 0);
+	//glRotatef(measuredRoll, 1, 0, 0);
+	//glRotatef(measuredPitch, 0, 0, 1);
+	glPushMatrix();
 	carModel.drawOBJ();
-	glRotatef(-measuredPitch, 0, 1, 0);
-	glRotatef(-measuredRoll, 1, 0, 0);
+	glPopMatrix();
+
+	glPushMatrix();
 	drawOrientationRings();
+	glPopMatrix();
+	//glRotatef(-measuredRoll, 1, 0, 0);
 	glRotatef(-30, 0, 0, 1);
 	glRotatef(-userOffset, 0, 0, 1);
 }
@@ -104,6 +111,7 @@ void x5car::drawOrientationRings(){
 
 	//Translate to car center
 	glTranslatef(xOffset,yOffset,zOffset);
+
 
 
 
@@ -235,10 +243,11 @@ void x5car::drawOrientationRings(){
 	}
 	drawSimpleArcXY(ringRadius+ringRadius/8,ringRadius/1.3+ringRadius/8,1500,40,140);
 	glColor4f(0.3f, 0.3f, 0.9f, 0.9);
-	if(measuredRoll>0){
-		drawSimpleArcXY(ringRadius+ringRadius/8,ringRadius/1.3+ringRadius/8,1500,90,90+measuredRoll,10);
+	double inverseRoll = -measuredRoll;
+	if(inverseRoll>0){
+		drawSimpleArcXY(ringRadius+ringRadius/8,ringRadius/1.3+ringRadius/8,1500,90,90+inverseRoll,3);
 	}else{
-		drawSimpleArcXY(ringRadius+ringRadius/8,ringRadius/1.3+ringRadius/8,1500,90+measuredRoll,90,10);
+		drawSimpleArcXY(ringRadius+ringRadius/8,ringRadius/1.3+ringRadius/8,1500,90+inverseRoll,90,3);
 	}
 
 	glColor4f(0.3f, 0.5f, 0.6f, 0.7);
@@ -261,14 +270,15 @@ void x5car::drawOrientationRings(){
 	}
 	drawSimpleArcXY(ringRadius+ringRadius/6,ringRadius/1.4+ringRadius/6,1500,40,140);
 	glColor4f(0.3f, 0.3f, 0.9f, 0.9);
-	if(measuredPitch>0){
-		drawSimpleArcXY(ringRadius+ringRadius/6,ringRadius/1.4+ringRadius/6,1500,90,90+measuredPitch,10);
+	double inversePitch = -measuredPitch;
+	if(inversePitch>0){
+		drawSimpleArcXY(ringRadius+ringRadius/6,ringRadius/1.4+ringRadius/6,1500,90,90+inversePitch,3);
 	}else{
-		drawSimpleArcXY(ringRadius+ringRadius/6,ringRadius/1.4+ringRadius/6,1500,90+measuredPitch,90,10);
+		drawSimpleArcXY(ringRadius+ringRadius/6,ringRadius/1.4+ringRadius/6,1500,90+inversePitch,90,3);
 	}
 	glColor4f(0.3f, 0.5f, 0.6f, 0.7);
 
-
+	glRotatef(-measuredPitch, 0, 0, 1);
 	glTranslatef(-xOffset,-yOffset,-zOffset);
 	glTranslatef(-x,-y,-z);
 }
