@@ -12,13 +12,15 @@
 #include "x5car.h"
 #include "DataController.h"
 #include <pthread.h>
+#include "PageHeader.h"
+//#include "AerialMap.h"
 
 #define SCREEN_WIDTH 1920
 #define SCREEN_HEIGHT 1080
 
-//OBJParser x5Car("/home/matt/Desktop/simpleX5.obj");
 x5car mainModel(40.0f,-10.0f,0);
 DataController dataCont;
+PageHeader mainHeader;
 
 float angle=0.0,deltaAngle = 0.0,ratio,rotationAngleDelta = 0,rotationAngle = 0;
 float x=0.0f,y=0.0f,z=0.0f;
@@ -27,6 +29,17 @@ float zero = 0;
 int deltaMove = 0;
 int indexer = 0;
 int shipRotationAngle = 0;
+int lastX = 0;
+int lastY = 0;
+double rotationalSpeed = 0;
+double mouseSpeed = 0;
+bool isClicked = false;
+int clickX = 0;
+int clickY = 0;
+double carAngle = 0;
+double originalAngle = 0;
+
+
 
 double pi = 3.14159262;
 HumanPlane mainPlane;
@@ -56,6 +69,8 @@ struct accelSocketData accelData;
 
 void* webAccept(void * webSocketDataPointer);
 void* accelAccept(void * accelSocketDataPointer);
+void updateMousePos(int x, int y);
+void mouse(int button, int state,int x, int y);
 
 void calculateFPS()
 {
@@ -181,16 +196,25 @@ void drawCar(){
 	mainModel.draw();
 }
 
+
 void drawGuage(){
 
+	glPushMatrix();
 	mainModel.drawOrientationText();
+	glTranslatef(0,200.0,0);
+
+	float baseY = 100.0f;
+	float rightX = 330.0f;
+	float leftX = 1580.0f;
+	float spacing = 300.0f;
 
 	//Throttle Guage 
-	float guageX=200.0f,guageY=200.0f;
+	float guageX=rightX,guageY=baseY;
 	Guage throttleGuage;
 	throttleGuage.x=guageX;
 	throttleGuage.y=guageY;
-	throttleGuage.label = "    Throttle (%)  \0";
+	throttleGuage.label = "  throttle \0";
+	throttleGuage.unitsLabel = " % ";
 	throttleGuage.maxValue = 100.0;
 	throttleGuage.currentValue = dataCont.engineThrottle;
 	throttleGuage.drawGuage();
@@ -198,53 +222,107 @@ void drawGuage(){
 
 
 	//Speed Guage 
-	guageY=500.0f;
+	guageY=baseY+spacing;
 	Guage speedGuage;
 	speedGuage.x=guageX;
 	speedGuage.y=guageY;
-	speedGuage.label =    "   Speed (MPH)   \0";
+	speedGuage.label =    "  speed   \0";
+	speedGuage.unitsLabel =    "mph";
 	speedGuage.maxValue = 100.0;
 	speedGuage.currentValue = dataCont.speed;
 	speedGuage.drawGuage();
 
 	//RPM Guage
-	guageY=800.0f;
+	guageY=baseY+spacing*2;
 	Guage rpmGuage;
 	rpmGuage.x=guageX;
 	rpmGuage.y=guageY;
-	rpmGuage.label =    "     RPM (k)   \0";
+	rpmGuage.label =    "   rpm   \0";
+	rpmGuage.unitsLabel =    " k ";
 	rpmGuage.maxValue = 6.0;
 	rpmGuage.currentValue = dataCont.rpm;
 	rpmGuage.drawGuage();
 
 	//Air Intake Guage
-	guageX=1680.0f;
-	guageY=200.0f;
+	guageX=leftX;
+	guageY=baseY;
 	Guage intakeGuage;
 	intakeGuage.x=guageX;
 	intakeGuage.y=guageY;
-	intakeGuage.label =    "  Intake Air Temp (C) \0";
+	intakeGuage.label =    "  intake \0";
+	intakeGuage.unitsLabel =    " °C ";
 	intakeGuage.maxValue = 120;
 	intakeGuage.currentValue = dataCont.airIntakeTemp;
 	intakeGuage.drawGuage();
 
-	guageY=500.0f;
+	guageY=baseY+spacing;
 	Guage coolantGuage;
 	coolantGuage.x=guageX;
 	coolantGuage.y=guageY;
-	coolantGuage.label =    " Engine Coolant Temp (C) \0";
+	coolantGuage.label =    "  engine \0";
+	coolantGuage.unitsLabel = " °C ";
 	coolantGuage.maxValue = 250;
 	coolantGuage.currentValue = dataCont.engineCoolantTemp;
 	coolantGuage.drawGuage();
 
-	guageY=800.0f;
+	guageY=baseY+spacing*2;
 	Guage manifestGuage;
 	manifestGuage.x=guageX;
 	manifestGuage.y=guageY;
-	manifestGuage.label =    " Manifest Pressure (kPA) \0";
+	manifestGuage.label =    "  manifold \0";
+	manifestGuage.unitsLabel = "kPA";
 	manifestGuage.maxValue = 250;
 	manifestGuage.currentValue = dataCont.manifoldABS;
 	manifestGuage.drawGuage();
+
+	glPushMatrix();
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glBegin(GL_LINES);
+	float coordX = rightX-throttleGuage.outerGuageRadius*1.7;
+	float coordY = baseY-throttleGuage.outerGuageRadius*1.9;
+	float coord2X = leftX+throttleGuage.outerGuageRadius*1.7;
+	float coord2Y = baseY-throttleGuage.outerGuageRadius*1.9;
+	glVertex3f(coordX,coordY,0);
+	glVertex3f(coord2X,coord2Y,0);
+	coordX = rightX-throttleGuage.outerGuageRadius*1.7;
+	coordY = baseY+spacing*2+throttleGuage.outerGuageRadius*1.3;
+	coord2X = leftX+throttleGuage.outerGuageRadius*1.7;
+	coord2Y = baseY+spacing*2+throttleGuage.outerGuageRadius*1.3;
+	glVertex3f(coordX,coordY,0);
+	glVertex3f(coord2X,coord2Y,0);
+	coordX = rightX-throttleGuage.outerGuageRadius*1.7;
+	coordY = baseY-throttleGuage.outerGuageRadius*1.9;
+	coord2X = rightX-throttleGuage.outerGuageRadius*1.7;
+	coord2Y = baseY+spacing*2+throttleGuage.outerGuageRadius*1.3;
+	glVertex3f(coordX,coordY,0);
+	glVertex3f(coord2X,coord2Y,0);
+	coordX = leftX+throttleGuage.outerGuageRadius*1.7;
+	coordY = baseY-throttleGuage.outerGuageRadius*1.9;
+	coord2X = leftX+throttleGuage.outerGuageRadius*1.7;
+	coord2Y = baseY+spacing*2+throttleGuage.outerGuageRadius*1.3;
+	glVertex3f(coordX,coordY,0);
+	glVertex3f(coord2X,coord2Y,0);
+	coordX = rightX+throttleGuage.outerGuageRadius*1.7;
+	coordY = baseY-throttleGuage.outerGuageRadius*1.9;
+	coord2X = rightX+throttleGuage.outerGuageRadius*1.7;
+	coord2Y = baseY+spacing*2+throttleGuage.outerGuageRadius*1.3;
+	glVertex3f(coordX,coordY,0);
+	glVertex3f(coord2X,coord2Y,0);
+	coordX = leftX-throttleGuage.outerGuageRadius*1.7;
+	coordY = baseY-throttleGuage.outerGuageRadius*1.9;
+	coord2X = leftX-throttleGuage.outerGuageRadius*1.7;
+	coord2Y = baseY+spacing*2+throttleGuage.outerGuageRadius*1.3;
+
+
+	glVertex3f(coordX,coordY,0);
+	glVertex3f(coord2X,coord2Y,0);
+
+
+	glEnd();
+	glPopMatrix();
+
+	glTranslatef(0,-200.0,0);
+	glPopMatrix();
 
 }
 
@@ -288,7 +366,9 @@ void drawHUD(){
 	glClear(GL_DEPTH_BUFFER_BIT);
 
 
+	mainHeader.draw();
 	drawGuage();
+
 
 	// Making sure we can render 3d again
 	glMatrixMode(GL_PROJECTION);
@@ -313,6 +393,20 @@ void renderScene(void) {
 		rotationAngleDelta=0;
 		rotateMe(rotationAngle);
 	}
+
+	if(!isClicked){
+		carAngle = carAngle + (mouseSpeed/500)*360;
+		mouseSpeed = mouseSpeed * 0.98;
+	}
+	while(carAngle>360){
+		carAngle-=360;
+	}
+	while(carAngle<0){
+		carAngle+=360;
+	}
+	mainModel.userOffset = (360-carAngle);
+
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	if (!webThreadCreated&&!webData.currentlyAccepting) {
@@ -339,17 +433,56 @@ void renderScene(void) {
 		accelThreadCreated = false;
 	}
 
+
 	drawPlane();
 	drawCar();
 	drawHUD();
 	calculateFPS();
 	glutSwapBuffers();
+
+
 	indexer++;
 
 
 }
 
+void updateMousePos(int x, int y){
+	mouseSpeed = lastX - x;
+	int threshold = 8;
+	if(mouseSpeed>threshold){
+		mouseSpeed = threshold;
+	}
+	if(mouseSpeed<-threshold){
+		mouseSpeed = -threshold;
+	}
 
+	carAngle = originalAngle - ((x - clickX)/15.0);
+	std::cout<<"click pos"<<clickX <<std::endl;
+	std::cout<<"current pos "<<x<<std::endl;
+	std::cout<<"car angle"<<carAngle<< std::endl;
+
+	lastX = x;
+}
+
+void mouse(int button, int state,int x, int y){
+	if (state == GLUT_DOWN){
+		isClicked = true;
+		clickX = x;
+		clickY = y;
+		lastX = x;
+		lastY = y;
+		originalAngle = carAngle;
+	}
+	if (state == GLUT_UP){
+		isClicked = false;
+		clickX = x;
+		clickY = y;
+		lastX = x;
+		lastY = y;
+	}
+
+
+}
 
 void pressKey(unsigned char key, int x, int y) {
 	std::cout << "Key press" << std::endl;
@@ -431,10 +564,10 @@ int main(int argc, char **argv) {
 	initScene();
 
 	// Enable lighting
+
 	glEnable(GL_LIGHTING);
 	glEnable(GL_MULTISAMPLE);
 	glEnable(GL_LIGHT0);
-	//glEnable(GL_LIGHT1);
 	GLfloat light_ambient[] = { 0.8, 0.8, 0.8, 0.5 };
 	GLfloat light_diffuse[] = { 0.1, 0.1, 0.1, 0.2 };
 	GLfloat light_specular[] = { 0.3, 0.3, 0.3, 0.5 };
@@ -466,6 +599,8 @@ int main(int argc, char **argv) {
 
 	glutDisplayFunc(renderScene);
 	glutIdleFunc(renderScene);
+	glutMotionFunc(updateMousePos);
+	glutMouseFunc(mouse);
 
 	glutReshapeFunc(changeSize);
 
@@ -483,7 +618,11 @@ void* webAccept(void * webSocketDataPointer) {
 	DataController * dataContPointer;
 	dataContPointer = (DataController *)myWebSocket->dataRef;
 
-	dataContPointer->UpdateOBD();
+	try{
+		dataContPointer->UpdateOBD();
+	}catch(...){
+		myWebSocket->currentlyAccepting = false;
+	}
 
 	myWebSocket->currentlyAccepting = false;
 
@@ -500,7 +639,11 @@ void* accelAccept(void * accelSocketDataPointer) {
 	DataController * dataContPointer;
 	dataContPointer = (DataController *)myAccelSocket->dataRef;
 
-	dataContPointer->UpdateAccel();
+	try{
+		dataContPointer->UpdateAccel();
+	}catch(...){
+		myAccelSocket->currentlyAccepting = false;
+	}
 
 	myAccelSocket->currentlyAccepting = false;
 

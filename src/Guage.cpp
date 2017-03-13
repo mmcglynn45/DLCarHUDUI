@@ -19,11 +19,6 @@ Guage::~Guage() {
 void Guage::drawGuage() {
 	float startPos = startOrientation;
 	float endPos=(currentValue/maxValue)*360+startPos;
-	float innerGuageRadius = 73.5;
-	float outerGuageRadius = 86.5;
-	float ringRadius = 80;
-
-
 
 	glTranslatef(x,y,0);
 	glPushMatrix();
@@ -36,6 +31,7 @@ void Guage::drawGuage() {
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	char textBuffer[20];
 	int n = sprintf(textBuffer, "%2.1f\0",currentValue);
+	glPushMatrix();
 	if(n>4){
 		glTranslatef(-innerGuageRadius/2,0,0);
 	}
@@ -45,12 +41,21 @@ void Guage::drawGuage() {
 	if(n==3){
 		glTranslatef(0,0,0);
 	}
+	glPopMatrix();
 	glutStrokeString(GLUT_STROKE_ROMAN, (unsigned char*)textBuffer);
+
+	glPushMatrix();
+	glTranslatef(-innerGuageRadius*2.0,-innerGuageRadius*1.7,0);
+	glScalef(0.7,0.7,0.7);
+	glColor4f(0.6f, 0.6f, 0.6f, 1.0f);
+	glutStrokeString(GLUT_STROKE_ROMAN, (unsigned char*)unitsLabel);
+	glPopMatrix();
 
 	//Draw Guage Label
 	glScalef(0.5,0.5,0.5);
 	glTranslatef(-innerGuageRadius*12,innerGuageRadius*12,0);
-	glColor4f(1.0f, 1.0f, 1.0f, 0.6f);
+	glScalef(2.0,2.0,0.5);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	glutStrokeString(GLUT_STROKE_ROMAN, (unsigned char*)label);
 
 

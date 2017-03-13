@@ -45,7 +45,7 @@ void DataController::UpdateOBD(){
         error("ERROR opening socket");
     server = gethostbyname("localhost");
     if (server == NULL) {
-        fprintf(stderr,"ERROR, no such host\n");
+        //fprintf(stderr,"ERROR, no such host\n");
         exit(0);
     }
     bzero((char *) &serv_addr, sizeof(serv_addr));
@@ -56,7 +56,6 @@ void DataController::UpdateOBD(){
     serv_addr.sin_port = htons(portno);
     if (connect(sockfd,(struct sockaddr *) &serv_addr,sizeof(serv_addr)) < 0)
         error("ERROR connecting");
-    printf("Please enter the message: ");
     n = write(sockfd,buffer,strlen(buffer));
     if (n < 0)
          error("ERROR writing to socket");
@@ -65,36 +64,27 @@ void DataController::UpdateOBD(){
     n = read(sockfd,receiveBuffer,255);
     if (n < 0)
          error("ERROR reading from socket");
-    printf("%s\n",receiveBuffer);
 
     std::string input = receiveBuffer;
     std::istringstream ss(input);
     std::string token;
 
     std::getline(ss, token, ',');
-    std::cout << token << '\n';
     sscanf(token.c_str(), "RPM: %lf", &rpm);
-    std::cout << rpm;
-    std::cout << "Resolved rpm as " << rpm << "\n";
 
     std::getline(ss, token, ',');
-    std::cout << token << '\n';
     sscanf(token.c_str(), " Speed: %lf", &speed);
 
     std::getline(ss, token, ',');
-    std::cout << token << '\n';
     sscanf(token.c_str(), " Throttle: %lf", &engineThrottle);
 
     std::getline(ss, token, ',');
-    std::cout << token << '\n';
     sscanf(token.c_str(), " IntakeTemp: %lf", &airIntakeTemp );
 
     std::getline(ss, token, ',');
-    std::cout << token << '\n';
     sscanf(token.c_str(), " EngineCoolantTemp: %lf", &engineCoolantTemp);
 
     std::getline(ss, token, ',');
-    std::cout << token << '\n';
     sscanf(token.c_str(), " ManifoldABS: %lf", &manifoldABS);
 
     close(sockfd);
@@ -112,7 +102,7 @@ void DataController::UpdateAccel(){
         error("ERROR opening socket");
     server = gethostbyname("10.42.0.5");
     if (server == NULL) {
-        fprintf(stderr,"ERROR, no such host\n");
+        //fprintf(stderr,"ERROR, no such host\n");
         exit(0);
     }
     bzero((char *) &serv_addr, sizeof(serv_addr));
@@ -123,7 +113,6 @@ void DataController::UpdateAccel(){
     serv_addr.sin_port = htons(portno);
     if (connect(sockfd,(struct sockaddr *) &serv_addr,sizeof(serv_addr)) < 0)
         error("ERROR connecting");
-    printf("Please enter the message: ");
     n = write(sockfd,buffer,strlen(buffer));
     if (n < 0)
          error("ERROR writing to socket");
@@ -132,32 +121,24 @@ void DataController::UpdateAccel(){
     n = read(sockfd,receiveBuffer,255);
     if (n < 0)
          error("ERROR reading from socket");
-    printf("%s\n",receiveBuffer);
 
     std::string input = receiveBuffer;
     std::istringstream ss(input);
     std::string token;
 
     std::getline(ss, token, ',');
-    std::cout << token << '\n';
     sscanf(token.c_str(), "Roll: %lf", &roll);
-    std::cout << roll;
-    std::cout << "Resolved rpm as " << roll << "\n";
 
     std::getline(ss, token, ',');
-    std::cout << token << '\n';
     sscanf(token.c_str(), " Pitch: %lf", &pitch);
 
     std::getline(ss, token, ',');
-    std::cout << token << '\n';
     sscanf(token.c_str(), " Yaw: %lf", &yaw);
 
     std::getline(ss, token, ',');
-    std::cout << token << '\n';
     sscanf(token.c_str(), " MX: %lf", &mx );
 
     std::getline(ss, token, ',');
-    std::cout << token << '\n';
     sscanf(token.c_str(), " MY: %lf", &my );
 
     roll = roll + rollOffset;
@@ -170,6 +151,5 @@ void DataController::UpdateAccel(){
 
 void error(const char *msg)
 {
-    perror(msg);
-    exit(0);
+    //perror(msg);
 }

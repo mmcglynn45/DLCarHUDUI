@@ -23,6 +23,10 @@ public:
 	double currentValue = 100;
 	double startOrientation = 270;
 	char * label = "Default Label (CM)\0";
+	char * unitsLabel = "mph";
+	float innerGuageRadius = 73.5;
+	float outerGuageRadius = 86.5;
+	float ringRadius = 80;
 
 
 	Guage();

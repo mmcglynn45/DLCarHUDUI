@@ -4,32 +4,38 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
+../src/AerialMap.cpp \
 ../src/DLCarHUDUI.cpp \
 ../src/DataController.cpp \
 ../src/Guage.cpp \
 ../src/Guage_test.cpp \
 ../src/OBJParser.cpp \
 ../src/OBJParser_test.cpp \
+../src/PageHeader.cpp \
 ../src/TerrainTile.cpp \
 ../src/x5car.cpp 
 
 OBJS += \
+./src/AerialMap.o \
 ./src/DLCarHUDUI.o \
 ./src/DataController.o \
 ./src/Guage.o \
 ./src/Guage_test.o \
 ./src/OBJParser.o \
 ./src/OBJParser_test.o \
+./src/PageHeader.o \
 ./src/TerrainTile.o \
 ./src/x5car.o 
 
 CPP_DEPS += \
+./src/AerialMap.d \
 ./src/DLCarHUDUI.d \
 ./src/DataController.d \
 ./src/Guage.d \
 ./src/Guage_test.d \
 ./src/OBJParser.d \
 ./src/OBJParser_test.d \
+./src/PageHeader.d \
 ./src/TerrainTile.d \
 ./src/x5car.d 
 
@@ -38,7 +44,7 @@ CPP_DEPS += \
 src/%.o: ../src/%.cpp
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C++ Compiler'
-	g++ -I/usr/include/freetype2 -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<"
+	g++ -std=c++0x -I/usr/include/freetype2 -O0 -g3 -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 

@@ -40,8 +40,8 @@ x5car::~x5car() {
 void x5car::draw(){
 	carModel.roll = 270-measuredRoll-measuredPitch*.4;
 	carModel.pitch = measuredPitch;
-	carModel.yaw = 245;
-	glRotatef(userOffset, 0, 0, 1);
+	carModel.yaw = 245+userOffset;
+	//glRotatef(userOffset, 0, 1, 0);
 	glRotatef(30, 0, 0, 1);
 	//glRotatef(measuredRoll, 1, 0, 0);
 	//glRotatef(measuredPitch, 0, 0, 1);
@@ -54,13 +54,13 @@ void x5car::draw(){
 	glPopMatrix();
 	//glRotatef(-measuredRoll, 1, 0, 0);
 	glRotatef(-30, 0, 0, 1);
-	glRotatef(-userOffset, 0, 0, 1);
+	//glRotatef(-userOffset, 0, 1, 0);
 }
 
 void x5car::drawOrientationText(){
 	    glTranslatef(x,y,0);
 		glPushMatrix();
-		glTranslatef(550,scale*400,0);
+		glTranslatef(550,scale*5400,0);
 		//Draw Guage Value
 		glScalef(0.2,0.2,0.2);
 		glScalef(1,-1, 1);
@@ -106,11 +106,13 @@ void x5car::drawOrientationRings(){
 
 	glTranslatef(x,y,z);
 	float xOffset = 0.0f;
-	float yOffset = -3.0f;
+	float yOffset = -6.0f;
 	float zOffset = 0.0f;
 
 	//Translate to car center
 	glTranslatef(xOffset,yOffset,zOffset);
+
+	glRotatef(userOffset, 0, 1, 0);
 
 
 
@@ -253,6 +255,7 @@ void x5car::drawOrientationRings(){
 	glColor4f(0.3f, 0.5f, 0.6f, 0.7);
 
 	//Ring 3
+
 	glRotatef(-90, 0, 1, 0);
 
 	for(float i = 40; i<140; i+=360/180){
