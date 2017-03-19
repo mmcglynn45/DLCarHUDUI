@@ -23,8 +23,17 @@ public:
 	size_t npixels;
 	int imgwidth, imgheight;
 
+	float offsetX = 0.5;
+	float offetY = 0.5;
+	float distX = 0.281;
+	float distY = 0.114;
+
+	GLuint tex;
+
 	AerialMap(char * path);
 	virtual ~AerialMap();
+	AerialMap();
+	void loadImage(char * path);
 
 	void draw();
 };

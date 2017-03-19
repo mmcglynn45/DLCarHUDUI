@@ -1,8 +1,14 @@
-src/DLCarHUDUI.o: ../src/DLCarHUDUI.cpp ../src/GraphicsHeader.h \
+src/MappingPage.o: ../src/MappingPage.cpp ../src/MappingPage.h \
+ ../src/AerialMap.h ../src/LandingPage.h ../src/GraphicsHeader.h \
  ../src/Plane.h ../src/HumanPlane.h ../src/ComputerPlane.h \
  ../src/Missile.h ../src/OBJParser.h ../src/Guage.h ../src/x5car.h \
- ../src/DataController.h ../src/PageHeader.h ../src/LandingPage.h \
- ../src/MappingPage.h ../src/AerialMap.h
+ ../src/DataController.h ../src/PageHeader.h
+
+../src/MappingPage.h:
+
+../src/AerialMap.h:
+
+../src/LandingPage.h:
 
 ../src/GraphicsHeader.h:
 
@@ -23,9 +29,3 @@ src/DLCarHUDUI.o: ../src/DLCarHUDUI.cpp ../src/GraphicsHeader.h \
 ../src/DataController.h:
 
 ../src/PageHeader.h:
-
-../src/LandingPage.h:
-
-../src/MappingPage.h:
-
-../src/AerialMap.h:

@@ -33,6 +33,7 @@ public:
 
 
 	OBJParser carModel;
+	x5car();
 	x5car(float baseX,float baseY, float baseZ);
 	virtual ~x5car();
 	void draw();

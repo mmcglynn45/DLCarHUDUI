@@ -9,6 +9,8 @@ CPP_SRCS += \
 ../src/DataController.cpp \
 ../src/Guage.cpp \
 ../src/Guage_test.cpp \
+../src/LandingPage.cpp \
+../src/MappingPage.cpp \
 ../src/OBJParser.cpp \
 ../src/OBJParser_test.cpp \
 ../src/PageHeader.cpp \
@@ -21,6 +23,8 @@ OBJS += \
 ./src/DataController.o \
 ./src/Guage.o \
 ./src/Guage_test.o \
+./src/LandingPage.o \
+./src/MappingPage.o \
 ./src/OBJParser.o \
 ./src/OBJParser_test.o \
 ./src/PageHeader.o \
@@ -33,6 +37,8 @@ CPP_DEPS += \
 ./src/DataController.d \
 ./src/Guage.d \
 ./src/Guage_test.d \
+./src/LandingPage.d \
+./src/MappingPage.d \
 ./src/OBJParser.d \
 ./src/OBJParser_test.d \
 ./src/PageHeader.d \

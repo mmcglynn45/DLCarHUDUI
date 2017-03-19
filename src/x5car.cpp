@@ -36,6 +36,10 @@ x5car::~x5car() {
 
 }
 
+x5car::x5car() {
+
+}
+
 
 void x5car::draw(){
 	carModel.roll = 270-measuredRoll-measuredPitch*.4;

@@ -21,7 +21,7 @@
 void error(const char *msg);
 
 DataController::DataController() {
-	UpdateAccel();
+	//UpdateAccel();
 	rollOffset = -roll;
 	pitchOffset = -pitch;
 	myOffset = -my;
