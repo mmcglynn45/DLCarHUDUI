@@ -8,9 +8,8 @@
 #include "MappingPage.h"
 
 MappingPage::MappingPage() {
-	map.loadImage("./data/image0.tif");
 	mainHeader.label = "map" ;
-	mainHeader.subLabel = "Stevens Pass";
+	mainHeader.subLabel = "current location";
 
 }
 

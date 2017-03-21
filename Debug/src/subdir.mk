@@ -5,6 +5,7 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
 ../src/AerialMap.cpp \
+../src/AerialTile.cpp \
 ../src/DLCarHUDUI.cpp \
 ../src/DataController.cpp \
 ../src/Guage.cpp \
@@ -19,6 +20,7 @@ CPP_SRCS += \
 
 OBJS += \
 ./src/AerialMap.o \
+./src/AerialTile.o \
 ./src/DLCarHUDUI.o \
 ./src/DataController.o \
 ./src/Guage.o \
@@ -33,6 +35,7 @@ OBJS += \
 
 CPP_DEPS += \
 ./src/AerialMap.d \
+./src/AerialTile.d \
 ./src/DLCarHUDUI.d \
 ./src/DataController.d \
 ./src/Guage.d \
