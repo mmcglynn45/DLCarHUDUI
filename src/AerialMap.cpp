@@ -107,7 +107,35 @@ void AerialMap::loadTiles(){
 	    overallPath = pathStart + pathEnd;
 	    newTile.path = overallPath;
 
+	    std::getline(ss, token, ',');
+	    std::getline(ss, token, ',');
+	    sscanf(token.c_str(), "%lf", &newTile.NELat);
+	    std::getline(ss, token, ',');
+	    std::getline(ss, token, ',');
+	    sscanf(token.c_str(), "%lf", &newTile.NELon);
+	    std::getline(ss, token, ',');
+	    std::getline(ss, token, ',');
+	    sscanf(token.c_str(), "%lf", &newTile.NWLat);
+	    std::getline(ss, token, ',');
+	    std::getline(ss, token, ',');
+	    sscanf(token.c_str(), "%lf", &newTile.NWLon);
+	    std::getline(ss, token, ',');
+	    std::getline(ss, token, ',');
+	    sscanf(token.c_str(), "%lf", &newTile.SELat);
+	    std::getline(ss, token, ',');
+	    std::getline(ss, token, ',');
+	    sscanf(token.c_str(), "%lf", &newTile.SELon);
+	    std::getline(ss, token, ',');
+	    std::getline(ss, token, ',');
+	    sscanf(token.c_str(), "%lf", &newTile.SWLat);
+	    std::getline(ss, token, ',');
+	    std::getline(ss, token, ',');
+	    sscanf(token.c_str(), "%lf", &newTile.SWLon);
+
+
+
 	    std::cout<<newTile.path<<std::endl;
+
 
 	    aerialTiles.push_back(newTile);
 
@@ -129,15 +157,52 @@ void AerialMap::LoadMyLocation(){
 
 				mappedTile = currentTile;
 
+				//West Longitude boundaries at given latitude
+				double deltaWestLatitude = myLatitude - currentTile.SWLat;
+				double slopeWestLatLon = (currentTile.NWLon - currentTile.SWLon) / (currentTile.NWLat - currentTile.SWLat);
+				double interceptWestLatLon = currentTile.SWLon;
+				double adjustedBorderWestLon = slopeWestLatLon*(deltaWestLatitude) + interceptWestLatLon;
+
+				//For east
+				double deltaEastLatitude = myLatitude - currentTile.SELat;
+				double slopeEastLatLon = (currentTile.NELon - currentTile.SELon) / (currentTile.NELat - currentTile.SELat);
+				double interceptEastLatLon = currentTile.SELon;
+				double adjustedBorderEastLon = slopeEastLatLon*(deltaEastLatitude) + interceptEastLatLon;
+
+				//For South
+				double deltaSouthLongitude = myLongitude - currentTile.SWLon;
+				double slopeSouthLonLat = (currentTile.SELat - currentTile.SWLat) / (currentTile.SELon - currentTile.SWLon);
+				double interceptSouthLonLat = currentTile.SWLat;
+				double adjustedBorderSouthLat = slopeSouthLonLat*(deltaSouthLongitude) + interceptSouthLonLat;
+
+				//For North
+				double deltaNorthLongitude = myLongitude - currentTile.NWLon;
+				double slopeNorthLonLat = (currentTile.NELat - currentTile.NWLat) / (currentTile.NELon - currentTile.NWLon);
+				double interceptNorthLonLat = currentTile.NWLat;
+				double adjustedBorderNorthLat = slopeNorthLonLat*(deltaNorthLongitude) + interceptNorthLonLat;
+
+
+
+
+
 				double longWidth = currentTile.borderEast - currentTile.borderWest;
+				double adjustedLongWidth = adjustedBorderEastLon - adjustedBorderWestLon;
+				double adjustedOffsetLong = myLongitude - adjustedBorderWestLon;
+
 				double offsetLong = myLongitude - currentTile.borderWest;
 				double correctionX = -0.0;
-				offsetX = offsetLong/longWidth + correctionX;
 
+				offsetX = adjustedOffsetLong/adjustedLongWidth + correctionX;
+				//offsetX = offsetLong/longWidth + correctionX;
+
+				double adjustedLatWidth = adjustedBorderNorthLat - adjustedBorderSouthLat;
+				double adjustedOffsetLat = myLatitude - adjustedBorderSouthLat;
 				double latWidth = currentTile.borderNorth - currentTile.borderSouth;
 				double offsetLat = myLatitude - currentTile.borderSouth;
 				double correctionY = -0.0;
-				offsetY = offsetLat/latWidth  + correctionY;
+
+				offsetY = adjustedOffsetLat/adjustedLatWidth + correctionY;
+				//offsetY = offsetLat/latWidth  + correctionY;
 
 				break;
 			}

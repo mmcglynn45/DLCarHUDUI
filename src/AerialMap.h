@@ -35,8 +35,8 @@ public:
 	float distX = 0.281;
 	float distY = 0.114;
 
-	float myLatitude = 47.9375;
-	float myLongitude = -121.6875;
+	float myLatitude = 47.608608;
+	float myLongitude = -122.150523;
 
 	AerialTile mappedTile;
 
