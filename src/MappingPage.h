@@ -14,7 +14,7 @@
 
 class MappingPage: public LandingPage {
 public:
-	MappingPage();
+	MappingPage(DataController * DataConrollerPointer);
 	virtual ~MappingPage();
 	void draw(void);
 	void drawMap();

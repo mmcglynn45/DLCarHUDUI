@@ -30,7 +30,8 @@
 
 class LandingPage {
 public:
-	LandingPage();
+	DataController * dataCont;
+	LandingPage(DataController * dataControllerPointer);
 	virtual ~LandingPage();
 
 
@@ -44,7 +45,7 @@ public:
 
 protected:
 	x5car mainModel;
-	DataController dataCont;
+
 	PageHeader mainHeader;
 
 	float angle=0.0,deltaAngle = 0.0,ratio,rotationAngleDelta = 0,rotationAngle = 0;

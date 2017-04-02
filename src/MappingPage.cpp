@@ -7,10 +7,9 @@
 
 #include "MappingPage.h"
 
-MappingPage::MappingPage() {
+MappingPage::MappingPage(DataController * dataControllerPointer) : LandingPage(dataControllerPointer) {
 	mainHeader.label = "map" ;
 	mainHeader.subLabel = "current location";
-
 }
 
 void MappingPage::draw(void) {
@@ -48,8 +47,8 @@ void MappingPage::drawMap(){
 
 
 
-	map.myLatitude = dataCont.latitude;
-	map.myLongitude = dataCont.longitude;
+	map.myLatitude = dataCont->latitude;
+	map.myLongitude = dataCont->longitude;
 
 	map.draw();
 

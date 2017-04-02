@@ -18,11 +18,13 @@
 #include "signal.h"
 //#include "AerialMap.h"
 
-LandingPage statusPage;
-MappingPage mapPage;
+DataController * datacont;
+LandingPage * statusPage;
+MappingPage * mapPage;
 LandingPage * home;
 int pageIndex = 1;
 int pageTotal = 2;
+
 
 #define SCREEN_WIDTH 1920
 #define SCREEN_HEIGHT 1080
@@ -75,9 +77,9 @@ void incrementPage(){
 	pageIndex = pageIndex % pageTotal;
 
 	if(pageIndex == 1){
-	   home = &statusPage;
+	   home = statusPage;
 	}else{
-	   home = &mapPage;
+	   home = mapPage;
 	}
 
 	glutKeyboardFunc(pressKey);
@@ -95,9 +97,18 @@ void incrementPage(){
 
 
 int main(int argc, char **argv) {
-	signal(SIGPIPE, SIG_IGN);
 
-	home = &statusPage;
+	signal(SIGPIPE, SIG_IGN);
+	DataController newController;
+	datacont = &newController;
+
+	MappingPage mpPage(datacont);
+	LandingPage landPage(datacont);
+
+	statusPage = &landPage;
+	mapPage = &mpPage;
+
+	home = statusPage;
 
 	glutInit(&argc, argv);
 	glutSetOption(GLUT_MULTISAMPLE,8);

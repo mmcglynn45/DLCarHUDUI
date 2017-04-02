@@ -29,10 +29,11 @@ struct accelSocketData
 
 struct accelSocketData accelData;
 
-LandingPage::LandingPage() {
+LandingPage::LandingPage(DataController * dataContPointer) {
 	mainModel = x5car(40.0f,-10.0f,0.0f);
-	webData.dataRef = &dataCont;
-	accelData.dataRef = &dataCont;
+	dataCont = dataContPointer;
+	webData.dataRef = dataCont;
+	accelData.dataRef = dataCont;
 }
 
 LandingPage::~LandingPage() {
@@ -142,11 +143,11 @@ void LandingPage::calculateFPS()
 }
 
 void LandingPage::drawCar(){
-	mainModel.measuredPitch = dataCont.pitch;
-	mainModel.measuredRoll = dataCont.roll;
-	mainModel.measuredYaw = dataCont.yaw;
-	mainModel.measuredMX = dataCont.mx;
-	mainModel.measuredMY = dataCont.my;
+	mainModel.measuredPitch = dataCont->pitch;
+	mainModel.measuredRoll = dataCont->roll;
+	mainModel.measuredYaw = dataCont->yaw;
+	mainModel.measuredMX = dataCont->mx;
+	mainModel.measuredMY = dataCont->my;
 	mainModel.draw();
 }
 
@@ -170,7 +171,7 @@ void LandingPage::drawGuage(){
 	throttleGuage.label = "  throttle \0";
 	throttleGuage.unitsLabel = " % ";
 	throttleGuage.maxValue = 100.0;
-	throttleGuage.currentValue = dataCont.engineThrottle;
+	throttleGuage.currentValue = dataCont->engineThrottle;
 	throttleGuage.drawGuage();
 
 
@@ -183,7 +184,7 @@ void LandingPage::drawGuage(){
 	speedGuage.label =    "  speed   \0";
 	speedGuage.unitsLabel =    "mph";
 	speedGuage.maxValue = 100.0;
-	speedGuage.currentValue = dataCont.speed;
+	speedGuage.currentValue = dataCont->speed;
 	speedGuage.drawGuage();
 
 	//RPM Guage
@@ -194,7 +195,7 @@ void LandingPage::drawGuage(){
 	rpmGuage.label =    "   rpm   \0";
 	rpmGuage.unitsLabel =    " k ";
 	rpmGuage.maxValue = 6.0;
-	rpmGuage.currentValue = dataCont.rpm;
+	rpmGuage.currentValue = dataCont->rpm;
 	rpmGuage.drawGuage();
 
 	//Air Intake Guage
@@ -206,7 +207,7 @@ void LandingPage::drawGuage(){
 	intakeGuage.label =    "  intake \0";
 	intakeGuage.unitsLabel =    " °C ";
 	intakeGuage.maxValue = 120;
-	intakeGuage.currentValue = dataCont.airIntakeTemp;
+	intakeGuage.currentValue = dataCont->airIntakeTemp;
 	intakeGuage.drawGuage();
 
 	guageY=baseY+spacing;
@@ -216,7 +217,7 @@ void LandingPage::drawGuage(){
 	coolantGuage.label =    "  engine \0";
 	coolantGuage.unitsLabel = " °C ";
 	coolantGuage.maxValue = 250;
-	coolantGuage.currentValue = dataCont.engineCoolantTemp;
+	coolantGuage.currentValue = dataCont->engineCoolantTemp;
 	coolantGuage.drawGuage();
 
 	guageY=baseY+spacing*2;
@@ -226,7 +227,7 @@ void LandingPage::drawGuage(){
 	manifestGuage.label =    "  manifold \0";
 	manifestGuage.unitsLabel = "kPA";
 	manifestGuage.maxValue = 250;
-	manifestGuage.currentValue = dataCont.manifoldABS;
+	manifestGuage.currentValue = dataCont->manifoldABS;
 	manifestGuage.drawGuage();
 
 	glPushMatrix();
