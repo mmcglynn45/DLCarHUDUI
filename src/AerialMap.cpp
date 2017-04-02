@@ -14,6 +14,8 @@ AerialMap::AerialMap(char * path) {
 }
 AerialMap::AerialMap() {
 	// TODO Auto-generated destructor stub
+	  glGenTextures(1, &tex);
+	  glBindTexture(GL_TEXTURE_2D, tex);
 	loadTiles();
 	  LoadMyLocation();
 
@@ -51,11 +53,11 @@ void AerialMap::loadImage(const char * path){
 	  imgwidth = img.width;
 	  displayImage();
 
+	  free(raster);
+
 }
 
 void AerialMap::displayImage(){
-	  glGenTextures(1, &tex);
-	  glBindTexture(GL_TEXTURE_2D, tex);
 
 	  float color[] = { 1.0f, 0.0f, 0.0f, 1.0f };
 	  glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, color);
