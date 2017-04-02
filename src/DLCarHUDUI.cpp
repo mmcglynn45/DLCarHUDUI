@@ -15,6 +15,7 @@
 #include "PageHeader.h"
 #include "LandingPage.h"
 #include "MappingPage.h"
+#include "signal.h"
 //#include "AerialMap.h"
 
 LandingPage statusPage;
@@ -94,6 +95,7 @@ void incrementPage(){
 
 
 int main(int argc, char **argv) {
+	signal(SIGPIPE, SIG_IGN);
 
 	home = &statusPage;
 

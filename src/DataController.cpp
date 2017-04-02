@@ -17,6 +17,7 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <signal.h>
 
 void error(const char *msg);
 
@@ -34,6 +35,7 @@ DataController::~DataController() {
 }
 
 void DataController::UpdateOBD(){
+	signal(SIGPIPE, SIG_IGN);
     int sockfd, portno, n;
     struct sockaddr_in serv_addr;
     struct hostent *server;
@@ -54,8 +56,13 @@ void DataController::UpdateOBD(){
          (char *)&serv_addr.sin_addr.s_addr,
          server->h_length);
     serv_addr.sin_port = htons(portno);
-    if (connect(sockfd,(struct sockaddr *) &serv_addr,sizeof(serv_addr)) < 0)
-        error("ERROR connecting");
+    if (connect(sockfd,(struct sockaddr *) &serv_addr,sizeof(serv_addr)) < 0){
+    	error("ERROR connecting");
+    	return;
+    }
+
+
+
     n = write(sockfd,buffer,strlen(buffer));
     if (n < 0)
          error("ERROR writing to socket");
@@ -100,6 +107,7 @@ void DataController::UpdateOBD(){
 }
 
 void DataController::UpdateAccel(){
+	signal(SIGPIPE, SIG_IGN);
     int sockfd, portno, n;
     struct sockaddr_in serv_addr;
     struct hostent *server;
@@ -120,8 +128,10 @@ void DataController::UpdateAccel(){
          (char *)&serv_addr.sin_addr.s_addr,
          server->h_length);
     serv_addr.sin_port = htons(portno);
-    if (connect(sockfd,(struct sockaddr *) &serv_addr,sizeof(serv_addr)) < 0)
-        error("ERROR connecting");
+    if (connect(sockfd,(struct sockaddr *) &serv_addr,sizeof(serv_addr)) < 0){
+    	error("ERROR connecting");
+    	return;
+    }
     n = write(sockfd,buffer,strlen(buffer));
     if (n < 0)
          error("ERROR writing to socket");
