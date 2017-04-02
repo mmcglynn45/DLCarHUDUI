@@ -48,7 +48,11 @@ void MappingPage::drawMap(){
 
 
 
+	map.myLatitude = dataCont.latitude;
+	map.myLongitude = dataCont.longitude;
+
 	map.draw();
+
 	drawBorder();
 
 

@@ -19,6 +19,7 @@
 #include <sstream>
 #include <iostream>
 #include "AerialTile.h"
+#include "math.h"
 
 class AerialMap {
 public:
@@ -38,6 +39,8 @@ public:
 	float myLatitude = 47.608608;
 	float myLongitude = -122.150523;
 
+	double radiusCycle = 20.0;
+
 	AerialTile mappedTile;
 
 	std::vector<AerialTile> aerialTiles;
@@ -53,6 +56,8 @@ public:
 	void loadImage(const char * path);
 	void loadTiles();
 	void LoadMyLocation();
+	void displayImage();
+	void drawArc(float offsetX, float offsetY, float innerRadius,float radius,float resolution,float startAngle, float maxAngle);
 
 	void draw();
 };

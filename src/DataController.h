@@ -26,6 +26,10 @@ public:
 	double pitchOffset = 0.0;
 	double mxOffset = 0.0;
 	double myOffset = 0.0;
+	double latitude = 0.0;
+	double longitude = 0.0;
+	double heading = 0.0;
+
 
 	DataController();
 	virtual ~DataController();

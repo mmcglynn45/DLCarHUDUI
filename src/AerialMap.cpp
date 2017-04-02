@@ -7,6 +7,7 @@
 
 #include "AerialMap.h"
 #include <iostream>
+#include <algorithm>
 
 AerialMap::AerialMap(char * path) {
 	  loadImage(path);
@@ -48,7 +49,11 @@ void AerialMap::loadImage(const char * path){
 	  }
 	  imgheight = img.height;
 	  imgwidth = img.width;
+	  displayImage();
 
+}
+
+void AerialMap::displayImage(){
 	  glGenTextures(1, &tex);
 	  glBindTexture(GL_TEXTURE_2D, tex);
 
@@ -65,9 +70,6 @@ void AerialMap::loadImage(const char * path){
 	  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
 
 	  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imgwidth, imgheight, 0, GL_RGBA, GL_UNSIGNED_BYTE, raster);
-
-
-
 }
 
 void AerialMap::loadTiles(){
@@ -149,7 +151,6 @@ void AerialMap::LoadMyLocation(){
 		AerialTile currentTile = aerialTiles[i];
 		if (myLatitude>=currentTile.borderSouth && myLatitude <= currentTile.borderNorth) {
 			if(myLongitude>=currentTile.borderWest&&myLongitude<=currentTile.borderEast){
-				std::cout << "Found" << currentTile.path;
 
 				if (mappedTile.path != currentTile.path) {
 					loadImage(currentTile.path.c_str());
@@ -204,6 +205,7 @@ void AerialMap::LoadMyLocation(){
 				offsetY = adjustedOffsetLat/adjustedLatWidth + correctionY;
 				//offsetY = offsetLat/latWidth  + correctionY;
 
+
 				break;
 			}
 		}
@@ -223,36 +225,37 @@ void AerialMap::draw(){
 		double borderYStart = 135.65;
 		double borderXEnd = 1727.05;
 
-	    //Distance X = 1544
-	    //Distance Y = 876.8
 
-	    //0.281
-	    //0.114
+	  glColor4f(0.3f,1.0f,1.0f,0.6f);
 
-	  //offsetX += .001;
+	  glBegin (GL_QUADS);
+	  double centerX = (borderXStart+borderXEnd)/2;
+	  double centerY = (borderYStart+borderYEnd)/2;
+	  glVertex2d(centerX-5,centerY+5);
+	  glVertex2d(centerX+5,centerY+5);
+	  glVertex2d(centerX+5,centerY-5);
+	  glVertex2d(centerX-5,centerY-5);
+	  glEnd();
+
+	  glColor4f(0.3f,1.0f,1.0f,0.6f);
+	  //glColor4f(0.0f, 0.0f, 0.0f, 1-(radiusCycle/60.0));
+	  double delta = (1-(radiusCycle/140.0))*5;
+	  double innerRadius = std::max(radiusCycle-delta,10.0);
+	  drawArc(centerX,centerY,innerRadius,radiusCycle,5000,0,360);
+
+	  radiusCycle+=0.2;
+
+	  if(radiusCycle>90.0){
+		  radiusCycle = 20.0;
+	  }
 
 
-		  glColor4f(0.3f,1.0f,1.0f,0.6f);
-
-		  glBegin (GL_QUADS);
-		  double centerX = (borderXStart+borderXEnd)/2;
-		  double centerY = (borderYStart+borderYEnd)/2;
-		  glVertex2d(centerX-5,centerY+5);
-		  glVertex2d(centerX+5,centerY+5);
-		  glVertex2d(centerX+5,centerY-5);
-		  glVertex2d(centerX-5,centerY-5);
-		  glEnd();
-
-
-	glEnable( GL_TEXTURE_2D );
+	  glEnable( GL_TEXTURE_2D );
 	  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
 	  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
 
 	  float color[] = { 1.0f, 0.0f, 0.0f, 1.0f };
 	  glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, color);
-
-	  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imgwidth, imgheight, 0, GL_RGBA, GL_UNSIGNED_BYTE, raster);
-
 
 	  glColor4f(1.0f,1.0f,1.0f,1.0f);
 
@@ -268,23 +271,35 @@ void AerialMap::draw(){
 
 	  glDisable( GL_TEXTURE_2D );
 
+	  LoadMyLocation();
 
 
+}
+
+void AerialMap::drawArc(float offsetX, float offsetY, float innerRadius,float radius,float resolution,float startAngle, float maxAngle){
+	for(float i = startAngle; i<maxAngle; i+=maxAngle/resolution){
+		float angleRadians = (i*2*M_PI)/360;
+		float coordX = offsetX + cosf(angleRadians)*innerRadius;
+		float coordY = offsetY + sinf(angleRadians)*innerRadius;
+		float coord2X = offsetX + cosf(angleRadians)*radius;
+		float coord2Y = offsetY + sinf(angleRadians)*radius;
+
+		if((radius-innerRadius)>1){
+			glLineWidth(0.2);
+			glBegin(GL_LINES);
+			glVertex3f(coordX,coordY,0);
+			glVertex3f(coord2X,coord2Y,0);
+			glEnd();
+
+		}else{
+			glPointSize(1.5);
+			glBegin(GL_POINTS);
+			glVertex3f(coordX,coordY,0);
+			glEnd();
+
+		}
 
 
-
-	  //glTranslatef(x,y,0.0);
-	  //glPushMatrix();
-	  //glRasterPos4f(x,y,0.0,0.1);
-	  //glPixelZoom(0.05,0.05);
-	 // glDrawPixels(imgwidth, imgheight,GL_RGBA, GL_UNSIGNED_BYTE,
-	  //  raster);
-	  //glPopMatrix();
-	  //glTranslatef(-x,-y,0.0);
-	  //std::cout<<"x"<<x<<"\n";
-	  //std::cout<<"y"<<y<<"\n";
-
-	  //x+=3.0;
-	  //y+=3.0;
+	}
 }
 

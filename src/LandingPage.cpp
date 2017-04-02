@@ -348,8 +348,6 @@ void LandingPage::draw(void) {
 	}
 	mainModel.userOffset = (360-carAngle);
 
-	std::cout<<"Base class draw";
-
 
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

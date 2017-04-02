@@ -87,6 +87,15 @@ void DataController::UpdateOBD(){
     std::getline(ss, token, ',');
     sscanf(token.c_str(), " ManifoldABS: %lf", &manifoldABS);
 
+    std::getline(ss, token, ',');
+    sscanf(token.c_str(), " Latitude: %lf", &latitude);
+
+    std::getline(ss, token, ',');
+    sscanf(token.c_str(), " Longitude: %lf", &longitude);
+
+    std::getline(ss, token, ',');
+    sscanf(token.c_str(), " TrackingAngle: %lf", &heading);
+
     close(sockfd);
 }
 
