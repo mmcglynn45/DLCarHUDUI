@@ -28,7 +28,6 @@ void MappingPage::draw(void) {
 
 	indexer++;
 
-
 }
 
 void MappingPage::drawMap(){
@@ -43,16 +42,17 @@ void MappingPage::drawMap(){
 	glClear(GL_DEPTH_BUFFER_BIT);
 
 
-	mainHeader.draw();
+
 
 
 
 	map.myLatitude = dataCont->latitude;
 	map.myLongitude = dataCont->longitude;
 
-	map.draw();
-
+    map.draw();
+    glLineWidth(2.0);
 	drawBorder();
+	mainHeader.draw();
 
 
 	// Making sure we can render 3d again

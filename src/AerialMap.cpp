@@ -60,7 +60,7 @@ void AerialMap::loadImage(const char * path){
 void AerialMap::displayImage(){
 
 	  float color[] = { 1.0f, 0.0f, 0.0f, 1.0f };
-	  glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, color);
+	  //glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, color);
 	  //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	  // Black/white checkerboard
 	  float pixels[] = {
@@ -256,10 +256,12 @@ void AerialMap::draw(){
 	  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
 	  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
 
-	  float color[] = { 1.0f, 0.0f, 0.0f, 1.0f };
-	  glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, color);
+	  //float color[] = { 1.0f, 0.0f, 0.0f, 1.0f };
+	  //glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, color);
 
 	  glColor4f(1.0f,1.0f,1.0f,1.0f);
+
+
 
 
 	  glPushMatrix();
@@ -270,6 +272,8 @@ void AerialMap::draw(){
 	  glTexCoord2d(offsetX-distX/2,offsetY+distY/2); glVertex2d(borderXStart,borderYStart);
 	  glEnd();
 	  glPopMatrix();
+
+
 
 	  glDisable( GL_TEXTURE_2D );
 
@@ -292,6 +296,7 @@ void AerialMap::drawArc(float offsetX, float offsetY, float innerRadius,float ra
 			glVertex3f(coordX,coordY,0);
 			glVertex3f(coord2X,coord2Y,0);
 			glEnd();
+			glLineWidth(1.0);
 
 		}else{
 			glPointSize(1.5);
