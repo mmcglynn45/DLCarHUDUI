@@ -48,6 +48,8 @@ void MappingPage::drawMap(){
 
 	map.myLatitude = dataCont->latitude;
 	map.myLongitude = dataCont->longitude;
+	map.speed = dataCont->speed;
+	map.heading = dataCont->heading;
 
     map.draw();
     glLineWidth(2.0);

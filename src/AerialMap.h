@@ -36,8 +36,16 @@ public:
 	float distX = 0.281;
 	float distY = 0.114;
 
+	double borderXStart = 182.95;
+	double borderYEnd = 1012.45;
+	double borderYStart = 135.65;
+	double borderXEnd = 1727.05;
+
 	float myLatitude = 47.608608;
 	float myLongitude = -122.150523;
+
+	double speed = 0.0;
+	double heading = 0.0;
 
 	double radiusCycle = 20.0;
 
@@ -45,8 +53,8 @@ public:
 
 	std::vector<AerialTile> aerialTiles;
 
-	char * tileLogPath = "/media/matt/MapsFast/MapsStore/tileLog.csv";
-	char * basePath = "/media/matt/MapsFast/MapsStore/";
+	std::string tileLogPath;
+	std::string basePath;
 
 	GLuint tex;
 
@@ -58,6 +66,8 @@ public:
 	void LoadMyLocation();
 	void displayImage();
 	void drawArc(float offsetX, float offsetY, float innerRadius,float radius,float resolution,float startAngle, float maxAngle);
+	void drawMetadata();
+	void loadTileLocation();
 
 	void draw();
 };

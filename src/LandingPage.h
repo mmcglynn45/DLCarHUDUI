@@ -64,6 +64,11 @@ protected:
 	int clickY = 0;
 	double carAngle = 0;
 	double originalAngle = 0;
+	int dragStartX = 0;
+	int dragStartY = 0;
+	bool isBeingDragged = false;
+	int dragEndX = 0;
+	int dragEndY = 0;
 
 	double pi = 3.14159262;
 	HumanPlane mainPlane;
