@@ -224,7 +224,7 @@ void AerialMap::LoadMyLocation() {
 
 void AerialMap::draw() {
 
-	drawMetadata();
+	
 
 	glColor4f(0.3f, 1.0f, 1.0f, 0.6f);
 
@@ -274,6 +274,8 @@ void AerialMap::draw() {
 	glDisable( GL_TEXTURE_2D);
 
 	LoadMyLocation();
+
+	drawMetadata();
 
 }
 
