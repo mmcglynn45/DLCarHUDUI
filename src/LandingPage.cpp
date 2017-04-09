@@ -354,8 +354,9 @@ void LandingPage::draw(void) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
-	manageData();
-
+	if(frameCount%20==0){	
+		manageData();
+	}
 	drawPlane();
 	drawCar();
 	drawHUD();
