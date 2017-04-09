@@ -354,7 +354,7 @@ void LandingPage::draw(void) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
-	if(frameCount%20==0){	
+	if(((int)frameCount)%20==0){	
 		manageData();
 	}
 	drawPlane();
