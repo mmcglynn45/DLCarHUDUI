@@ -43,18 +43,19 @@ void MappingPage::drawMap(){
 
 
 
+	try{
+		map.myLatitude = dataCont->latitude;
+		map.myLongitude = dataCont->longitude;
+		map.speed = dataCont->speed;
+		map.heading = dataCont->heading;
+		map.draw();
+		glLineWidth(2.0);
+		drawBorder();
+		mainHeader.draw();
+	}catch(...){
+		std::cout << "Error occurred during map render.\n";
+	}
 
-
-
-	map.myLatitude = dataCont->latitude;
-	map.myLongitude = dataCont->longitude;
-	map.speed = dataCont->speed;
-	map.heading = dataCont->heading;
-
-    map.draw();
-    glLineWidth(2.0);
-	drawBorder();
-	mainHeader.draw();
 
 
 	// Making sure we can render 3d again

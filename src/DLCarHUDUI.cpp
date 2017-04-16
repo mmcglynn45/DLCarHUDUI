@@ -22,7 +22,7 @@ DataController * datacont;
 LandingPage * statusPage;
 MappingPage * mapPage;
 LandingPage * home;
-int pageIndex = 1;
+int pageIndex = 0;
 int pageTotal = 2;
 
 
@@ -108,7 +108,7 @@ int main(int argc, char **argv) {
 	statusPage = &landPage;
 	mapPage = &mpPage;
 
-	home = statusPage;
+	home = mapPage;
 
 	glutInit(&argc, argv);
 	glutSetOption(GLUT_MULTISAMPLE,8);
